@@ -7,6 +7,8 @@ import IconWhatsapp from "@/assets/icons/IconWhatsapp.svg";
 import IconFacebook from "@/assets/icons/IconFacebook.svg";
 import IconTelegram from "@/assets/icons/IconTelegram.svg";
 import IconPinterest from "@/assets/icons/IconPinterest.svg";
+import IconWeChat from "@/assets/icons/IconWeChat.svg";
+import IconXiaohongshu from "@/assets/icons/IconXiaohongshu.svg";
 import { SITE } from "@/config";
 
 interface Social {
@@ -17,6 +19,18 @@ interface Social {
 }
 
 export const SOCIALS: Social[] = [
+  {
+    name: "小红书",
+    href: "https://xhslink.com/m/1mz1H2wVnkU",
+    linkTitle: `${SITE.title} on 小红书`,
+    icon: IconXiaohongshu,
+  },
+  {
+    name: "微信",
+    href: "/wechat-qr.jpg",
+    linkTitle: `${SITE.title} on 微信`,
+    icon: IconWeChat,
+  },
   {
     name: "GitHub",
     href: "https://github.com/satnaing/astro-paper",

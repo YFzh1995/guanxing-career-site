@@ -8,6 +8,8 @@ import LinkButton from "./LinkButton.astro";
     SOCIALS.map(social => (
       <LinkButton
         href={social.href}
+        target="_blank"
+        rel="noopener noreferrer"
         class="p-2 hover:rotate-6 sm:p-1"
         title={social.linkTitle}
       >
