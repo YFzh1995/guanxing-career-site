@@ -90,7 +90,7 @@ const category = categoryMatch ? categoryMatch[1] : null;
       transition:name={slugifyStr(title.replaceAll(".", "-"))}
       class="font-serif text-3xl font-extrabold text-heading tracking-[-0.02em] leading-tight sm:text-4xl mb-4"
     >
-      {category && <span class="!text-heading font-medium">【{category}】</span>}{title}
+      {category && <span class="font-serif font-extrabold !text-heading">【{category}】</span>}{title}
     </h1>
     <div class="flex items-center gap-3 text-sm text-slate-400 mb-8 pb-6 border-b border-slate-50">
       <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
