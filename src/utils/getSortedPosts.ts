@@ -5,13 +5,19 @@ const getSortedPosts = (posts: CollectionEntry<"blog">[]) => {
   return posts
     .filter(postFilter)
     .sort(
-      (a, b) =>
-        Math.floor(
-          new Date(b.data.modDatetime ?? b.data.pubDatetime).getTime() / 1000
-        ) -
-        Math.floor(
-          new Date(a.data.modDatetime ?? a.data.pubDatetime).getTime() / 1000
-        )
+      (a, b) => {
+        const aFeatured = a.data.featured ? 1 : 0;
+        const bFeatured = b.data.featured ? 1 : 0;
+        if (aFeatured !== bFeatured) return bFeatured - aFeatured;
+        return (
+          Math.floor(
+            new Date(b.data.modDatetime ?? b.data.pubDatetime).getTime() / 1000
+          ) -
+          Math.floor(
+            new Date(a.data.modDatetime ?? a.data.pubDatetime).getTime() / 1000
+          )
+        );
+      }
     );
 };
 
