@@ -16,7 +16,7 @@ const category = categoryMatch ? categoryMatch[1] : null;
 <li class="post-item">
   <a href={getPath(id, filePath)} class="block group">
     <Heading class="font-serif text-xl font-extrabold text-heading mb-3 leading-snug tracking-[-0.02em] group-hover:text-blue-600 transition-colors duration-200">
-      {category && <span>【{category}】</span>}{title}
+      {category && <span class="!text-heading">【{category}】</span>}{title}
     </Heading>
     <div class="flex items-center gap-3 text-sm text-slate-400 mb-3">
       <time datetime={pubDatetime.toISOString()}>
