@@ -89,7 +89,7 @@ const postsData = posts.map(p => {
                 <div class="flex flex-wrap gap-2">
                   {groupTags[g.name].map(t => (
                     <button
-                      class="tag-pill text-xs px-3 py-1 rounded-full border border-slate-200 text-slate-500 bg-white hover:border-accent hover:text-accent transition-colors"
+                      class="tag-pill text-sm px-4 py-2 rounded-full border border-slate-200 text-slate-500 bg-white hover:border-accent hover:text-accent transition-colors touch-manipulation"
                       data-tag={t.tagSlug}
                     >
                       {t.tagName}
