@@ -80,16 +80,16 @@ const postsData = posts.map(p => {
           <span id="filter-arrow" class="ml-2 inline-block transition-transform rotate-180">▾</span>
         </span>
       </button>
-      <div id="filter-body" class="px-5 py-4 border-t border-slate-100">
+      <div id="filter-body" class="px-3 sm:px-5 py-3 border-t border-slate-100">
         {
           tagGroups.map(g =>
             groupTags[g.name].length > 0 && (
-              <div class="mb-4 last:mb-0">
-                <h3 class="text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">{g.name}</h3>
-                <div class="flex flex-wrap gap-2">
+              <div class="mb-3 last:mb-0">
+                <h3 class="text-xs font-medium text-slate-400 uppercase tracking-wider mb-1.5">{g.name}</h3>
+                <div class="flex flex-wrap gap-1.5">
                   {groupTags[g.name].map(t => (
                     <button
-                      class="tag-pill text-xs px-3 py-1.5 rounded-full border border-slate-200 text-slate-500 bg-white hover:border-accent hover:text-accent transition-colors touch-manipulation"
+                      class="tag-pill text-xs px-2 py-1 rounded-full border border-slate-200 text-slate-500 bg-white hover:border-accent hover:text-accent transition-colors touch-manipulation"
                       data-tag={t.tagSlug}
                     >
                       {t.tagName}
