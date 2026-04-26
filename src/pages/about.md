@@ -14,10 +14,11 @@ title: "关于"
 
 ## 联系与合作
 
+- **微信**：guanxingge2025
 - **小红书**：[观星哥](https://xhslink.com/m/1mz1H2wVnkU)
-- **微信公众号**：扫码添加好友
-- **B站**：搜索「观星哥」
-- **知乎**：搜索「观星哥」
+- **微信公众号**：搜索「观星哥的财职进化论」
+- **B站**：[观星哥GuanXingGe](https://space.bilibili.com/3706975883889370)
+- **知乎**：[观星哥](https://www.zhihu.com/people/guanxingge)
 
 ---
 
