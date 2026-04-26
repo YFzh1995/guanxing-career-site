@@ -1,0 +1,93 @@
+---
+import IconXiaohongshu from "@/assets/icons/IconXiaohongshu.svg";
+import IconWeChat from "@/assets/icons/IconWeChat.svg";
+---
+
+<section
+  id="subscribe-cta"
+  class="py-6 my-6 rounded-lg bg-gradient-to-r from-accent/10 via-accent/5 to-accent/10 border border-accent/20"
+>
+  <div class="text-center mb-4">
+    <h2 class="text-xl font-bold mb-1">每周更新财务职场深度拆解</h2>
+    <p class="text-foreground/70 text-sm">
+      关注我的社交媒体，获取最新文章与实战建议
+    </p>
+  </div>
+  <div class="flex flex-wrap justify-center gap-4">
+    <a
+      href="https://xhslink.com/m/1mz1H2wVnkU"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="subscribe-card group flex flex-col items-center p-4 rounded-lg bg-background border border-border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:border-accent/50"
+    >
+      <div class="mb-2 p-2 rounded-full bg-red-50 dark:bg-red-900/20">
+        <IconXiaohongshu class="size-6 text-red-500" />
+      </div>
+      <span class="font-semibold text-sm mb-0.5">小红书</span>
+      <span class="text-xs text-foreground/60">观星哥</span>
+    </a>
+    <button
+      id="wechat-btn"
+      class="subscribe-card group flex flex-col items-center p-4 rounded-lg bg-background border border-border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:border-accent/50 cursor-pointer"
+    >
+      <div class="mb-2 p-2 rounded-full bg-green-50 dark:bg-green-900/20">
+        <IconWeChat class="size-6 text-green-500" />
+      </div>
+      <span class="font-semibold text-sm mb-0.5">微信</span>
+      <span class="text-xs text-foreground/60">扫码添加</span>
+    </button>
+  </div>
+</section>
+
+<div
+  id="wechat-modal"
+  class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm"
+>
+  <div class="relative rounded-lg bg-background p-6 max-w-sm mx-4">
+    <button
+      id="wechat-close"
+      class="absolute top-3 right-3 text-foreground/50 hover:text-foreground"
+      aria-label="Close"
+    >
+      ✕
+    </button>
+    <h3 class="text-lg font-semibold mb-4 text-center">微信扫码添加</h3>
+    <div class="flex justify-center mb-4">
+      <img
+        src="/wechat-qr.jpg"
+        alt="微信二维码"
+        class="w-64 h-64 object-cover rounded-lg"
+      />
+    </div>
+    <p class="text-sm text-center text-foreground/60">
+      扫码添加观星哥微信，获取一对一咨询
+    </p>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const modal = document.getElementById("wechat-modal");
+    const openBtn = document.getElementById("wechat-btn");
+    const closeBtn = document.getElementById("wechat-close");
+
+    if (!modal || !openBtn || !closeBtn) return;
+
+    openBtn.addEventListener("click", () => {
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    });
+
+    closeBtn.addEventListener("click", () => {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    });
+
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+      }
+    });
+  });
+</script>

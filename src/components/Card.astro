@@ -1,6 +1,5 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { slugifyStr } from "@/utils/slugify";
 import { getPath } from "@/utils/getPath";
 import Datetime from "./Datetime.astro";
 
@@ -11,23 +10,22 @@ type Props = {
 const { variant: Heading = "h2", id, data, filePath } = Astro.props;
 
 const { title, description, ...props } = data;
+
+const categoryMatch = filePath?.match(/src\/data\/blog\/([^/]+)\//);
+const category = categoryMatch ? categoryMatch[1] : null;
 ---
 
-<li class="my-6">
+<li class="py-5 border-b border-slate-50 first:pt-0 last:border-b-0">
   <a
     href={getPath(id, filePath)}
-    class:list={[
-      "inline-block text-lg font-medium text-accent",
-      "decoration-dashed underline-offset-4 hover:underline",
-      "focus-visible:no-underline focus-visible:underline-offset-0",
-    ]}
+    class="block group"
   >
-    <Heading
-      style={{ viewTransitionName: slugifyStr(title.replaceAll(".", "-")) }}
-    >
-      {title}
+    <Heading class="font-serif text-lg font-semibold text-heading group-hover:text-blue-600 transition-colors duration-150 mb-1">
+      {category && <span>【{category}】</span>}{title}
     </Heading>
   </a>
-  <Datetime {...props} />
-  <p>{description}</p>
+  <div class="text-sm text-slate-400 mb-2">
+    <Datetime {...props} />
+  </div>
+  <p class="text-slate-500 text-sm leading-relaxed line-clamp-2">{description}</p>
 </li>

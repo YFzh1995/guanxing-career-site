@@ -3,105 +3,77 @@ import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import Socials from "@/components/Socials.astro";
-import LinkButton from "@/components/LinkButton.astro";
-import Card from "@/components/Card.astro";
+import PostCard from "@/components/PostCard.astro";
 import getSortedPosts from "@/utils/getSortedPosts";
-import IconRss from "@/assets/icons/IconRss.svg";
+import getPostsByCategory from "@/utils/getPostsByCategory";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import { SITE } from "@/config";
-import { SOCIALS } from "@/constants";
 
 const posts = await getCollection("blog");
 
 const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+const recentPosts = sortedPosts.filter(({ data }) => !data.draft);
+const categories = getPostsByCategory(posts, 3);
 ---
 
 <Layout>
   <Header />
-  <main id="main-content" data-layout="index" class="app-layout">
-    <section id="hero" class:list={["pt-8 pb-6", "border-b border-border"]}>
-      <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-5xl">
-        驱动财务职场进化的，是认知与决策。
-      </h1>
-      <a
-        target="_blank"
-        href="/rss.xml"
-        class="inline-block"
-        aria-label="rss feed"
-        title="RSS Feed"
-      >
-        <IconRss
-          width={20}
-          height={20}
-          class="scale-125 stroke-accent stroke-3 rtl:-rotate-90"
-        />
-        <span class="sr-only">RSS Feed</span>
-      </a>
+  <main id="main-content" data-layout="index">
+    <section id="hero" class="relative w-full flex flex-col items-center justify-center pt-32 pb-12 overflow-hidden">
+  
+      <div class="absolute inset-0 z-0">
+        <div class="w-full h-full bg-[url('/hero-bg.png')] bg-cover bg-center bg-no-repeat"></div>
+      </div>
+      <div class="absolute inset-0 z-10 bg-black/60"></div>
+      <div class="absolute inset-x-0 bottom-0 z-20 h-[150px] bg-gradient-to-t from-white to-transparent"></div>
 
-      <p>
-        我是观星哥。财务是个极度依托于平台的岗位，如果看不透底层逻辑，证书、专业知识和实操能力在平台差异之下，几乎可以被抹的一干二净。我在这里深拆财务职场真相，解构财务职业发展的底层逻辑。
-      </p>
-      <p class="mt-2">
-        Read the blog posts or check
-        <LinkButton
-          class="underline decoration-dashed underline-offset-4 hover:text-accent"
-          href="https://github.com/satnaing/astro-paper#readme"
-        >
-          README
-        </LinkButton> for more info.
-      </p>
-      <p class="mt-4">更多深度拆解，欢迎关注我的社交媒体：</p>
-      {
-        // only display if at least one social link is enabled
-        SOCIALS.length > 0 && (
-          <div class="mt-2 flex max-sm:flex-col sm:items-center">
-            <Socials />
-          </div>
-        )
-      }
+      <div class="relative z-30 flex flex-col items-center text-center px-4 w-full max-w-5xl mx-auto pb-24">
+        
+        <h1 class="text-white font-serif font-black leading-[1.8] tracking-widest text-2xl md:text-3xl mb-8">
+          <span class="block">驱动职场进化的，</span>
+          <span class="block">不是读过多少书，考过什么证，加过多少班，</span>
+          <span class="block text-gray-100 mt-2">而是认知、策略和抉择</span>
+        </h1>
+
+        <p class="text-gray-200 text-sm md:text-base tracking-wider mb-8">
+          拆解财务职场真相，解构职业发展的底层逻辑。
+        </p>
+
+      </div>
     </section>
 
-    {
-      featuredPosts.length > 0 && (
-        <section
-          id="featured"
-          class:list={[
-            "pt-12 pb-6",
-            { "border-b border-border": recentPosts.length > 0 },
-          ]}
+    <div class="app-layout pt-10 bg-background">
+      <div class="flex items-center gap-4 mb-8 pb-3 border-b border-slate-50 overflow-x-auto">
+        {
+          categories.map(category => (
+            <a
+              href={`/categories/${category.key}/`}
+              class="category-pill whitespace-nowrap"
+            >
+              {category.key}
+              <span class="text-slate-300 ms-1">{category.count}</span>
+            </a>
+          ))
+        }
+      </div>
+
+      <section id="recent-posts">
+        <ul>
+          {recentPosts.slice(0, SITE.postPerIndex + 2).map(post => (
+            <PostCard {...post} />
+          ))}
+        </ul>
+      </section>
+
+      <div class="py-8 text-center">
+        <a
+          href="/posts/"
+          class="inline-flex items-center gap-2 text-sm font-medium text-accent hover:text-accent/80 transition-colors"
         >
-          <h2 class="text-2xl font-semibold tracking-wide">Featured</h2>
-          <ul>
-            {featuredPosts.map(data => (
-              <Card variant="h3" {...data} />
-            ))}
-          </ul>
-        </section>
-      )
-    }
-
-    {
-      recentPosts.length > 0 && (
-        <section id="recent-posts" class="pt-12 pb-6">
-          <h2 class="text-2xl font-semibold tracking-wide">Recent Posts</h2>
-          <ul>
-            {recentPosts.map(
-              (data, index) =>
-                index < SITE.postPerIndex && <Card variant="h3" {...data} />
-            )}
-          </ul>
-        </section>
-      )
-    }
-
-    <div class="my-8 text-center">
-      <LinkButton href="/posts/">
-        All Posts
-        <IconArrowRight class="inline-block rtl:-rotate-180" />
-      </LinkButton>
+          查看全部文章
+          <IconArrowRight class="size-4 rtl:-rotate-180" />
+        </a>
+      </div>
     </div>
   </main>
   <Footer />

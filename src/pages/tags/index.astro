@@ -2,23 +2,193 @@
 import { getCollection } from "astro:content";
 import Main from "@/layouts/Main.astro";
 import Layout from "@/layouts/Layout.astro";
-import Tag from "@/components/Tag.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import getUniqueTags from "@/utils/getUniqueTags";
 import { SITE } from "@/config";
+import { slugifyStr } from "@/utils/slugify";
+import { getPath } from "@/utils/getPath";
 
-const posts = await getCollection("blog");
+const posts = await getCollection("blog", ({ data }) => !data.draft);
 
-let tags = getUniqueTags(posts);
+// Define tag groups by attribute
+const tagGroups = [
+  {
+    name: "职业阶段",
+    tags: ["通用", "应届/在校", "1-3年", "3-5年", "5-8年", "8年+", "管理层"],
+  },
+  {
+    name: "核心主题",
+    tags: [
+      "认知升级", "岗位认知", "跳槽转型", "能力构建", "行业洞察", 
+      "焦虑应对", "职业路径", "晋升卡位", "offer选择", "财务BP", 
+      "四大审计", "商业思维", "35岁危机", "AI与财务", "自我认知", 
+      "平台选择", "证书价值", "简历重构", "求职面试", "薪资谈判", 
+      "实习规划", "结构主义", "数据洞察", "创业思考", "产品思维", 
+      "面试策略", "职业倦怠", "职业复利", "职业标签", "AI工具", "行业风口"
+    ],
+  },
+  {
+    name: "行业领域",
+    tags: ["金融", "互联网", "民企", "央企/国企", "外企", "制造业", "AI行业", "跨境电商"],
+  },
+];
+
+// Build tag map: { groupName: Set of tags }
+const groupTags: Record<string, { tagName: string; tagSlug: string }[]> = {};
+for (const g of tagGroups) groupTags[g.name] = [];
+const seen: Record<string, Set<string>> = {};
+for (const g of tagGroups) seen[g.name] = new Set();
+
+// Collect all posts for client-side filtering
+const postsData = posts.map(p => {
+  // Skip the first tag (Category) for attribute filtering
+  const attrTags = p.data.tags.slice(1);
+  for (const t of attrTags) {
+    for (const g of tagGroups) {
+      if (g.tags.includes(t)) {
+        const slug = slugifyStr(t);
+        if (!seen[g.name].has(slug)) {
+          seen[g.name].add(slug);
+          groupTags[g.name].push({ tagName: t, tagSlug: slug });
+        }
+      }
+    }
+  }
+  return {
+    url: getPath(p.id, p.filePath),
+    title: p.data.title,
+    description: p.data.description,
+    pubDatetime: p.data.pubDatetime.toISOString(),
+    tags: p.data.tags,
+    tagSlugs: p.data.tags.map(t => slugifyStr(t)),
+  };
+});
 ---
 
-<Layout title={`Tags | ${SITE.title}`}>
+<Layout title={`标签 | ${SITE.title}`}>
   <Header />
-  <Main pageTitle="Tags" pageDesc="All the tags used in posts.">
-    <ul class="flex flex-wrap gap-6">
-      {tags.map(({ tag, tagName }) => <Tag {tag} {tagName} />)}
-    </ul>
+  <Main pageTitle="标签筛选" pageDesc="按分类标签筛选感兴趣的文章">
+    <!-- Collapsible Filter Panel -->
+    <div id="tag-filter-panel" class="mb-8 border border-slate-100 rounded-lg overflow-hidden">
+      <button
+        id="toggle-filter-btn"
+        class="w-full flex items-center justify-between px-5 py-3 bg-slate-50 hover:bg-slate-100 transition-colors"
+      >
+        <span class="font-medium text-sm text-heading">标签筛选</span>
+        <span class="text-xs text-slate-400">
+          <span id="selected-count">0</span> 个已选
+          <span id="filter-arrow" class="ml-2 inline-block transition-transform rotate-180">▾</span>
+        </span>
+      </button>
+      <div id="filter-body" class="px-5 py-4 border-t border-slate-100">
+        {
+          tagGroups.map(g =>
+            groupTags[g.name].length > 0 && (
+              <div class="mb-4 last:mb-0">
+                <h3 class="text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">{g.name}</h3>
+                <div class="flex flex-wrap gap-2">
+                  {groupTags[g.name].map(t => (
+                    <button
+                      class="tag-pill text-xs px-3 py-1 rounded-full border border-slate-200 text-slate-500 bg-white hover:border-accent hover:text-accent transition-colors"
+                      data-tag={t.tagSlug}
+                    >
+                      {t.tagName}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )
+          )
+        }
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="results-area">
+      <div id="results-count" class="text-sm text-slate-400 mb-4">共 {posts.length} 篇文章</div>
+      <ul id="results-list">
+        {postsData.map(p => (
+          <li class="post-item py-5 border-b border-slate-50" data-tags={p.tagSlugs.join(",")}>
+            <a href={p.url} class="block group">
+              <h3 class="font-serif text-lg font-extrabold text-heading mb-1.5 leading-snug group-hover:text-accent transition-colors">
+                【{p.tags[0]}】{p.title}
+              </h3>
+              <p class="text-slate-500 text-sm leading-relaxed line-clamp-2 mb-2">{p.description}</p>
+              <time class="text-xs text-slate-400" datetime={p.pubDatetime}>
+                {new Date(p.pubDatetime).toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric" })}
+              </time>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   </Main>
   <Footer />
 </Layout>
+
+<script>
+  // Pass posts data to client
+  const allPosts = [...document.querySelectorAll("#results-list > li")];
+  const selectedTags = new Set<string>();
+  const pills = document.querySelectorAll(".tag-pill");
+  const countEl = document.getElementById("selected-count")!;
+  const resultsCount = document.getElementById("results-count")!;
+
+  function updateResults() {
+    let visible = 0;
+    for (const item of allPosts) {
+      const itemTags = (item as HTMLElement).dataset.tags?.split(",") || [];
+      if (selectedTags.size === 0) {
+        (item as HTMLElement).style.display = "";
+        visible++;
+      } else {
+        const allMatch = [...selectedTags].every(st => itemTags.includes(st));
+        (item as HTMLElement).style.display = allMatch ? "" : "none";
+        if (allMatch) visible++;
+      }
+    }
+    resultsCount.textContent = selectedTags.size === 0
+      ? `共 ${allPosts.length} 篇文章`
+      : `筛选出 ${visible} 篇文章`;
+    countEl.textContent = String(selectedTags.size);
+  }
+
+  for (const pill of pills) {
+    pill.addEventListener("click", () => {
+      const tag = (pill as HTMLElement).dataset.tag!;
+      if (selectedTags.has(tag)) {
+        selectedTags.delete(tag);
+        pill.classList.remove("active-pill");
+      } else {
+        selectedTags.add(tag);
+        pill.classList.add("active-pill");
+      }
+      updateResults();
+    });
+  }
+
+  // Toggle filter panel
+  const toggleBtn = document.getElementById("toggle-filter-btn")!;
+  const filterBody = document.getElementById("filter-body")!;
+  const filterArrow = document.getElementById("filter-arrow")!;
+  let isCollapsed = false;
+
+  toggleBtn.addEventListener("click", () => {
+    isCollapsed = !isCollapsed;
+    if (isCollapsed) {
+      (filterBody as HTMLElement).style.display = "none";
+      filterArrow.style.transform = "rotate(0deg)";
+    } else {
+      (filterBody as HTMLElement).style.display = "";
+      filterArrow.style.transform = "rotate(180deg)";
+    }
+  });
+</script>
+
+<style is:global>
+  .tag-pill.active-pill {
+    background-color: var(--accent) !important;
+    color: white !important;
+    border-color: var(--accent) !important;
+  }
+</style>

@@ -1,0 +1,52 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getPath } from "@/utils/getPath";
+import { slugifyStr } from "@/utils/slugify";
+import IconCalendar from "@/assets/icons/IconCalendar.svg";
+import Tag from "./Tag.astro";
+
+type Props = CollectionEntry<"blog">;
+
+const { id, data, filePath } = Astro.props;
+const { title, description, tags, pubDatetime } = data;
+
+const wordCount = description?.length || 0;
+const readTime = Math.max(1, Math.ceil(wordCount / 200));
+---
+
+<a
+  href={getPath(id, filePath)}
+  class:list={[
+    "featured-card block rounded-lg border border-border p-6",
+    "transition-all duration-300 hover:-translate-y-1 hover:shadow-lg",
+    "focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-dashed",
+  ]}
+>
+  <div class="flex items-start justify-between mb-3">
+    <h3
+      class="text-xl font-bold text-accent line-clamp-2"
+      style={{ viewTransitionName: slugifyStr(title.replaceAll(".", "-")) }}
+    >
+      {title}
+    </h3>
+    <span class="shrink-0 ms-2 text-xs font-medium px-2 py-1 rounded-full bg-accent/10 text-accent">
+      精选
+    </span>
+  </div>
+  <p class="text-foreground/70 mb-4 line-clamp-3 text-sm leading-relaxed">
+    {description}
+  </p>
+  <div class="flex items-center justify-between">
+    <ul class="flex flex-wrap gap-2">
+      {tags.slice(0, 2).map(tag => (
+        <Tag tag={slugifyStr(tag)} tagName={tag} size="sm" />
+      ))}
+    </ul>
+    <div class="flex items-center text-xs text-foreground/50 shrink-0 ms-2">
+      <IconCalendar class="inline-block size-3 me-1" />
+      <span>{pubDatetime.toLocaleDateString("zh-CN")}</span>
+      <span class="mx-1">·</span>
+      <span>{readTime} 分钟</span>
+    </div>
+  </div>
+</a>

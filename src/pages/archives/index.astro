@@ -8,32 +8,16 @@ import Card from "@/components/Card.astro";
 import getPostsByGroupCondition from "@/utils/getPostsByGroupCondition";
 import { SITE } from "@/config";
 
-// Redirect to 404 page if `showArchives` config is false
 if (!SITE.showArchives) {
   return Astro.redirect("/404");
 }
 
 const posts = await getCollection("blog", ({ data }) => !data.draft);
-
-const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
 ---
 
 <Layout title={`Archives | ${SITE.title}`}>
   <Header />
-  <Main pageTitle="Archives" pageDesc="All the articles I've archived.">
+  <Main pageTitle="归档" pageDesc="按时间浏览所有文章">
     {
       Object.entries(
         getPostsByGroupCondition(posts, post =>
@@ -42,9 +26,11 @@ const months = [
       )
         .sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))
         .map(([year, yearGroup]) => (
-          <div>
-            <span class="text-2xl font-bold">{year}</span>
-            <sup class="text-sm">{yearGroup.length}</sup>
+          <div class="mb-10">
+            <div class="flex items-baseline gap-2 mb-6 pb-2 border-b border-slate-50">
+              <span class="font-serif text-2xl font-extrabold text-heading">{year}</span>
+              <span class="text-sm text-slate-400">{yearGroup.length} 篇</span>
+            </div>
             {Object.entries(
               getPostsByGroupCondition(
                 yearGroup,
@@ -53,12 +39,11 @@ const months = [
             )
               .sort(([monthA], [monthB]) => Number(monthB) - Number(monthA))
               .map(([month, monthGroup]) => (
-                <div class="flex flex-col sm:flex-row">
-                  <div class="mt-6 min-w-36 text-lg sm:my-6">
-                    <span class="font-bold">{months[Number(month) - 1]}</span>
-                    <sup class="text-xs">{monthGroup.length}</sup>
+                <div class="flex flex-col sm:flex-row gap-2 mb-4">
+                  <div class="mt-1 min-w-20 text-sm text-slate-400 shrink-0">
+                    {month}月
                   </div>
-                  <ul>
+                  <ul class="flex-1">
                     {monthGroup
                       .sort(
                         (a, b) =>

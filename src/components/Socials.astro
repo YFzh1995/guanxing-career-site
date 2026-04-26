@@ -1,21 +1,35 @@
 ---
 import { SOCIALS } from "@/constants";
-import LinkButton from "./LinkButton.astro";
+
+type Props = {
+  variant?: "default" | "outline" | "white";
+};
+
+const { variant = "default" } = Astro.props;
 ---
 
-<div class="flex flex-wrap items-center gap-1">
+<div class="flex items-center gap-3">
   {
     SOCIALS.map(social => (
-      <LinkButton
+      <a
         href={social.href}
         target="_blank"
         rel="noopener noreferrer"
-        class="p-2 hover:rotate-6 sm:p-1"
+        class:list={[
+          "transition-colors duration-150 text-sm font-medium",
+          variant === "white" ? "text-white/80 hover:text-white" : 
+          variant === "outline" ? "text-slate-400 hover:text-accent stroke-[1.5]" : 
+          "text-foreground/50 hover:text-accent stroke-2"
+        ]}
         title={social.linkTitle}
       >
-        <social.icon class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" />
-        <span class="sr-only">{social.linkTitle}</span>
-      </LinkButton>
+        {variant === "white" ? social.linkTitle : (
+          <>
+            <social.icon class="size-5 stroke-current fill-none" />
+            <span class="sr-only">{social.linkTitle}</span>
+          </>
+        )}
+      </a>
     ))
   }
 </div>

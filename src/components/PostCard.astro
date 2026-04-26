@@ -1,0 +1,45 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getPath } from "@/utils/getPath";
+
+type Props = {
+  variant?: "h2" | "h3";
+} & CollectionEntry<"blog">;
+
+const { variant: Heading = "h2", id, data, filePath } = Astro.props;
+const { title, description, pubDatetime, tags } = data;
+
+const categoryMatch = filePath?.match(/src\/data\/blog\/([^/]+)\//);
+const category = categoryMatch ? categoryMatch[1] : null;
+---
+
+<li class="post-item">
+  <a href={getPath(id, filePath)} class="block group">
+    <Heading class="font-serif text-xl font-extrabold text-heading mb-3 leading-snug tracking-[-0.02em] group-hover:text-blue-600 transition-colors duration-200">
+      {category && <span>【{category}】</span>}{title}
+    </Heading>
+    <div class="flex items-center gap-3 text-sm text-slate-400 mb-3">
+      <time datetime={pubDatetime.toISOString()}>
+        {pubDatetime.toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric" })}
+      </time>
+      {
+        tags.length > 0 && (
+          <>
+            <span>·</span>
+            <span class="truncate">
+              {tags.slice(0, 2).map((tag, i) => (
+                <span>
+                  {tag}
+                  {i < Math.min(tags.length, 2) - 1 && " · "}
+                </span>
+              ))}
+            </span>
+          </>
+        )
+      }
+    </div>
+    <p class="text-slate-500 text-sm leading-relaxed line-clamp-2">
+      {description}
+    </p>
+  </a>
+</li>

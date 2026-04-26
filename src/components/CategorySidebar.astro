@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+type Props = {
+  categories: {
+    key: string;
+    count: number;
+    latestPosts: CollectionEntry<"blog">[];
+  }[];
+};
+
+const { categories } = Astro.props;
+---
+
+<nav id="category-sidebar">
+  <h2 class="text-xs font-medium text-slate-400 uppercase tracking-wider mb-3">
+    分类
+  </h2>
+  {
+    categories.map(category => (
+      <a
+        href={`/categories/${category.key}/`}
+        class="category-link"
+      >
+        <span>{category.key}</span>
+        <span class="text-slate-300 ms-1">{category.count}</span>
+      </a>
+    ))
+  }
+</nav>

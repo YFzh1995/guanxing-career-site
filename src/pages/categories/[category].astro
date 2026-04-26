@@ -1,0 +1,48 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection } from "astro:content";
+import Main from "@/layouts/Main.astro";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import PostCard from "@/components/PostCard.astro";
+import getSortedPosts from "@/utils/getSortedPosts";
+
+export const getStaticPaths = (async () => {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+  const categoryMap = new Map<string, typeof posts>();
+
+  for (const post of posts) {
+    const filePath = post.filePath || "";
+    const match = filePath.match(/src\/data\/blog\/([^/]+)\//);
+    const category = match ? match[1] : null;
+    if (!category) continue;
+
+    if (!categoryMap.has(category)) {
+      categoryMap.set(category, []);
+    }
+    categoryMap.get(category)!.push(post);
+  }
+
+  return Array.from(categoryMap.entries()).map(([category, categoryPosts]) => ({
+    params: { category },
+    props: {
+      posts: getSortedPosts(categoryPosts),
+      category,
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+const { posts, category } = Astro.props;
+---
+
+<Layout title={`${category} | 观星职场`}>
+  <Header />
+  <Main pageTitle={category} pageDesc={`${category}相关文章`}>
+    <ul>
+      {posts.map(post => <PostCard variant="h3" {...post} />)}
+    </ul>
+  </Main>
+  <Footer />
+</Layout>
