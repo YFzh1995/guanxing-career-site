@@ -158,6 +158,7 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 .dim-card{background:#fff;border-radius:12px;padding:18px 20px;margin-bottom:12px;border-left:3px solid #b8956a;box-shadow:0 1px 2px rgba(0,0,0,.03)}
 .dim-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .dim-card-label{font-size:13px;font-weight:600;color:#1a1a1a}
+.dim-card-score{font-size:13px;font-weight:600;margin:0 6px}
 .dim-card-letter{font-size:22px;font-weight:900;letter-spacing:1px;color:#b8956a}
 .dim-track{position:relative;height:6px;margin-bottom:6px;background:#e8e2d8;border-radius:3px}
 .dim-fill{position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,#b8956a 0%,#d4bc8c 100%);border-radius:3px;transition:width .3s ease}
@@ -181,38 +182,53 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 // DATA
 // ═══════════════════════════════════════════
 const QUESTIONS = [
-  { id:1,  dim:0, q:"我属于那种每一步都知道自己往哪走的人。", a:"是的", b:"差不多", c:"不太是" },
-  { id:2,  dim:0, q:"面试官问职业规划——我不慌，心里是有方向的。", a:"是的", b:"有点方向", c:"不太有" },
-  { id:3,  dim:0, q:"我的职业经历能串成一条比较清楚的线。", a:"能", b:"部分能", c:"不太能" },
-  { id:4,  dim:0, q:"我的简历一看就有比较明确的主线。", a:"有", b:"有一点", c:"不太有" },
-  { id:5,  dim:0, q:"我换工作之前一般都想清楚了为什么要换。", a:"是的", b:"有时候", c:"换完了才想" },
-  { id:6,  dim:0, q:"方向这件事上，我算是搞清楚了的。", a:"是的", b:"大概有", c:"还在找" },
-  { id:7,  dim:0, q:"三五年后想做什么——这个问题难不倒我。", a:"难不倒", b:"能说一点", c:"难" },
-  { id:8,  dim:0, q:"我的职业路径更像：一条有方向的河，不是到处分叉的树。", a:"更像河", b:"介于两者", c:"更像树" },
-  { id:9,  dim:1, q:"新的机会出现，我一般是那个先举手的人。", a:"是的", b:"看情况", c:"一般不会" },
-  { id:10, dim:1, q:"「这事一定能成」——听到这话我会先兴奋，不是先怀疑。", a:"先兴奋", b:"一半一半", c:"先怀疑" },
-  { id:11, dim:1, q:"裸辞这件事，我做得出来。", a:"做得出来", b:"看存款", c:"做不到" },
-  { id:12, dim:1, q:"回头看，没做的事比做了的事更让我惦记。", a:"没做的更惦记", b:"差不多", c:"做了的更后悔" },
-  { id:13, dim:1, q:"在一个地方待十二年——想想就觉得该换换了。", a:"待不住", b:"地方好也许可以", c:"我可以" },
-  { id:14, dim:1, q:"被调到陌生业务线，我先看有什么新机会。", a:"先看机会", b:"一边确认一边看", c:"先确认安全" },
-  { id:15, dim:1, q:"「太稳定」这件事会让我有点慌。", a:"会的", b:"有一点", c:"不会" },
-  { id:16, dim:1, q:"「试一下又不会死」——这话我是信的。", a:"信的", b:"分情况", c:"不信" },
-  { id:17, dim:2, q:"我习惯先把事情想清楚，再动手。", a:"是的", b:"看什么事", c:"先动再说" },
-  { id:18, dim:2, q:"一封邮件发出去之前，我一般会再看一遍。", a:"会的", b:"偶尔", c:"不会" },
-  { id:19, dim:2, q:"临时被叫去做决定——我会觉得不太舒服。", a:"不舒服", b:"看什么事", c:"还好" },
-  { id:20, dim:2, q:"别人已经跳到下一个话题了，我还在想上一个。", a:"经常这样", b:"偶尔", c:"不会" },
-  { id:21, dim:2, q:"做了决定之后，我会忍不住复盘有没有漏洞。", a:"会的", b:"偶尔", c:"不太会" },
-  { id:22, dim:2, q:"我的问题不是方向错了，是想太久了。", a:"想太久是卡点", b:"有时候", c:"不是" },
-  { id:23, dim:2, q:"「先开枪再瞄准」——这种事我干不出来。", a:"干不出来", b:"偶尔可以", c:"我就是这样的" },
-  { id:24, dim:2, q:"十次讨论里，我大多是先听完，最后才开口的那个。", a:"是的", b:"一半一半", c:"不是" },
-  { id:25, dim:3, q:"我有一个能拿得出手的专长方向。", a:"有", b:"有一点", c:"什么都会一点" },
-  { id:26, dim:3, q:"部门里一个难题卡住了，最后我能解决——这种事发生过。", a:"不止一次", b:"一两次", c:"不太有" },
-  { id:27, dim:3, q:"我不太担心简历上体现不出价值，因为方向比较聚焦。", a:"是的", b:"有点担心", c:"挺担心的" },
-  { id:28, dim:3, q:"有些东西不是新同事三个月就能接手的。", a:"是的", b:"部分能部分不能", c:"大部分都能" },
-  { id:29, dim:3, q:"我的价值更多体现在深度上，不是广度上。", a:"更多是深度", b:"一半一半", c:"更多是广度" },
-  { id:30, dim:3, q:"「你的核心竞争力是什么」——这个问题我能比较快地说出来。", a:"能", b:"想一下能", c:"不太好说" },
-  { id:31, dim:3, q:"有一两件事，我知道自己是部门里做得最好的。", a:"有", b:"可能有一两件", c:"不太有" },
-  { id:32, dim:3, q:"用一句话形容我的能力——像一个钉子，不是一块板子。", a:"更像钉子", b:"介于两者", c:"更像板子" },
+  // ── dim 0: 职业主线 (L聚焦 ↔ C分散) ──
+  { id:1,  dim:0, q:"回头看过去三年，我的职业选择大多是有方向的，不是'待够了就走'。", a:"完全符合", b:"基本符合", c:"说不准", d:"不太符合", e:"完全不符" },
+  { id:2,  dim:0, q:"我能用一句话说清楚自己'是做什么方向的'——对方听完不会追问'所以呢？'", a:"可以", b:"差不多", c:"不太确定", d:"比较模糊", e:"说不清" },
+  { id:3,  dim:0, q:"我换工作之前，一般都想清楚了为什么要换，而不是'换了再说'。", a:"每次都想清楚", b:"多数时候会想", c:"有时候先换再说", d:"换了再想", e:"完全凭直觉" },
+  { id:4,  dim:0, q:"一个猎头找你，描述了一个听起来有意思但和你当前方向无关的机会。你的第一反应？", a:"礼貌拒绝", b:"听听但不去", c:"有点纠结", d:"先聊再说", e:"马上心动" },
+  { id:5,  dim:0, q:"三五年后想做什么——这个问题让我觉得踏实，不是焦虑。", a:"很清楚", b:"大概有方向", c:"有时清晰有时模糊", d:"很少想", e:"完全不知道" },
+  { id:6,  dim:0, q:"同事问你'你将来想成为什么样的财务人'——你能给出一个让对方点头的答案吗？", a:"能，而且对方认可", b:"大概能说", c:"说过但对方没反应", d:"不太会说", e:"从来没想过" },
+  { id:7,  dim:0, q:"朋友问我在忙什么，我说得清楚自己正在为什么目标努力。", a:"非常清楚", b:"基本能说清", c:"有时能有时不行", d:"不太说得清", e:"完全说不清" },
+  { id:8,  dim:0, q:"年底述职，你更倾向于讲一个贯穿全年的主线故事，还是罗列几个独立的成果？", a:"一定是主线", b:"偏主线", c:"看情况", d:"偏罗列", e:"全是独立成果" },
+  { id:9,  dim:0, q:"你的简历发出去，HR能一眼看出你的职业方向吗？", a:"一定能", b:"大概能", c:"可能还需要解释", d:"不太能", e:"我自己都看不清" },
+  { id:10, dim:0, q:"面试官问职业规划——我不慌，心里是有方向的。", a:"完全不慌", b:"基本不慌", c:"有时候会慌", d:"经常慌", e:"一被问就慌" },
+
+  // ── dim 1: 风险偏好 (R进取 ↔ S稳健) ──
+  { id:11, dim:1, q:"新机会出现时，我一般是先兴奋、再评估风险，而不是先评估风险、再决定要不要兴奋。", a:"先兴奋", b:"有点兴奋再想", c:"说不准", d:"先评估再想", e:"先评估再说" },
+  { id:12, dim:1, q:"公司给你两个选择：A.薪资稳涨幅小 B.底薪低但提成上不封顶。你选？", a:"一定选B", b:"倾向B", c:"纠结死", d:"倾向A", e:"一定选A" },
+  { id:13, dim:1, q:"'试一下又不会死'——这句话我是信的。", a:"完全信", b:"基本信", c:"分情况", d:"不太信", e:"完全不信" },
+  { id:14, dim:1, q:"一个看起来很有前景但不熟悉的领域缺人，领导暗示你可以去——你的第一反应？", a:"马上去", b:"很感兴趣", c:"需要想想", d:"先观望", e:"坚决不去" },
+  { id:15, dim:1, q:"'太稳定'这件事会让我有点慌——感觉自己在舒适区待太久了。", a:"非常慌", b:"有点慌", c:"偶尔会有", d:"不太慌", e:"完全不慌" },
+  { id:16, dim:1, q:"加班到十点发现方案有个小漏洞——不改明天也没人发现。你改不改？", a:"一定改完再走", b:"大概率改", c:"看心情", d:"明天再说", e:"不改也没事" },
+  { id:17, dim:1, q:"裸辞这件事——如果理由充分，我做得出来。", a:"毫不犹豫", b:"会纠结但能", c:"看存款", d:"大概率不会", e:"绝对不行" },
+  { id:18, dim:1, q:"在一个公司待满三年，你开始觉得'差不多该换个环境了'。", a:"一定会", b:"经常这样想", c:"偶尔想", d:"很少想", e:"从没想过" },
+  { id:19, dim:1, q:"回头看，没做的事比做了的事更让我惦记。", a:"没做的更惦记", b:"偏没做的", c:"差不多", d:"偏做过的", e:"做过的更后悔" },
+  { id:20, dim:1, q:"你的存款够活六个月。一个你不太看好的项目在招人——你会去面试看看吗？", a:"一定会去", b:"可能会去", c:"看情况", d:"大概不会", e:"一定不会" },
+
+  // ── dim 2: 决策模式 (T谋定 ↔ E即行) ──
+  { id:21, dim:2, q:"一封重要邮件发出去之前，我一般会再看一遍——不是检查错别字，是检查逻辑。", a:"一定会", b:"通常会", c:"看内容", d:"偶尔会", e:"从来不会" },
+  { id:22, dim:2, q:"团队讨论了一个小时还没结论——你一般是什么时候开口的？", a:"最后才开口", b:"听完大部分才说", c:"看情况", d:"中间就说了", e:"一开始就说" },
+  { id:23, dim:2, q:"'先开枪再瞄准'——这种事我干不出来。", a:"绝对干不出", b:"很难", c:"偶尔可以", d:"有时候会", e:"我就是这样的" },
+  { id:24, dim:2, q:"同事让你推荐一家餐厅——你打开App翻了多久才给出建议？", a:"翻很久比较", b:"翻一会", c:"看情况", d:"很快给一个", e:"秒回一个" },
+  { id:25, dim:2, q:"临时被叫去拍板做决定——我会觉得不太舒服。", a:"非常不舒服", b:"不太舒服", c:"看是什么事", d:"还行", e:"完全没问题" },
+  { id:26, dim:2, q:"周五下午四点，一个不太紧急但有点复杂的任务丢过来——你是立刻动手还是下周一再说？", a:"先列计划再说", b:"想清楚再开工", c:"看情况", d:"先做一个初版", e:"立刻动手" },
+  { id:27, dim:2, q:"做了决定之后，我会忍不住复盘有没有漏洞。", a:"每次都复盘", b:"经常会", c:"偶尔会", d:"很少复盘", e:"决定就过了" },
+  { id:28, dim:2, q:"你正在做方案，同事路过说'这里是不是有点问题'——你是继续做完再说，还是停下来先查？", a:"先查完再继续", b:"倾向于先查", c:"看严重程度", d:"标记一下继续", e:"做完再说" },
+  { id:29, dim:2, q:"我的问题不是方向错了——是想太久了。", a:"最大卡点", b:"经常这样", c:"有时候", d:"不太是", e:"完全不是" },
+  { id:30, dim:2, q:"开会时有人提出一个你觉得有逻辑漏洞的方案，但其他人都在点头——你？", a:"当场指出", b:"会后私聊", c:"看情况", d:"先观察", e:"不说，随他们" },
+
+  // ── dim 3: 能力深度 (D专深 ↔ B广博) ──
+  { id:31, dim:3, q:"我有一个能拿得出手的专长方向——别人提起这个领域会想到我。", a:"有，公认的", b:"有一个但不太出名", c:"好像有一点", d:"什么都会一点", e:"没有" },
+  { id:32, dim:3, q:"年度述职你更倾向于：铺开5-6项不同类型成果 vs 深讲1-2项最深入的工作。", a:"一定是深讲", b:"偏深讲", c:"看情况", d:"偏铺开", e:"一定是铺开" },
+  { id:33, dim:3, q:"我不太担心简历上体现不出价值，因为方向聚焦，每段经历都能说清价值。", a:"完全不担心", b:"不太担心", c:"有时候担心", d:"有点担心", e:"很担心" },
+  { id:34, dim:3, q:"HR突然问'你最大的优势是什么'——你能在15秒内给出一个具体到能举例的答案吗？", a:"脱口而出", b:"想一下能", c:"说得出来但不够具体", d:"要想很久", e:"说不出来" },
+  { id:35, dim:3, q:"我的价值更多在深度上——把一个领域做透，而不是什么都插一脚。", a:"完全是深度", b:"偏深度", c:"一半一半", d:"偏广度", e:"完全是广度" },
+  { id:36, dim:3, q:"部门来了新人，三个月后他能不能接手你最核心的工作？", a:"绝对不行", b:"大部分不行", c:"部分能部分不能", d:"大部分能", e:"上手很快" },
+  { id:37, dim:3, q:"有一两件事，我知道自己是团队里做得最好的。", a:"不止一两件", b:"有一两件", c:"可能有一件", d:"不太确定", e:"没有" },
+  { id:38, dim:3, q:"有一个跨界项目需要懂三个不同领域的人——你觉得自己适合吗？", a:"不适合，太散了", b:"不太适合", c:"说不准", d:"可能适合", e:"非常适合" },
+  { id:39, dim:3, q:"用一句话形容我的能力——像一个钉子，不是一块板子。", a:"更像钉子", b:"偏钉子", c:"介于两者", d:"偏板子", e:"更像板子" },
+  { id:40, dim:3, q:"领导说'这个项目需要快速上手'——你倾向于选自己最擅长的方向，还是选能学到新东西的方向？", a:"一定选擅长", b:"偏擅长", c:"看情况", d:"偏新方向", e:"一定选新的" },
 ];
 
 const TYPES = {
@@ -452,8 +468,10 @@ function getScore(dimIdx) {
   shuffled.forEach(q => {
     if (q.dim !== dimIdx) return;
     const a = answers[q.id];
-    if (a === 0) s += 1;
-    else if (a === 2) s -= 1;
+    if (a === 0) s += 2;
+    else if (a === 1) s += 1;
+    else if (a === 3) s -= 1;
+    else if (a === 4) s -= 2;
   });
   return s;
 }
@@ -475,7 +493,7 @@ function getScoresFromCode(code) {
   dimOrder.forEach((d, i) => {
     const di = DIMS[d];
     const letter = parts[i];
-    scores[d] = letter === di.left ? 6 : -6;
+    scores[d] = letter === di.left ? 12 : -12;
   });
   return scores;
 }
@@ -628,7 +646,7 @@ function generateShareImage(code) {
     const letter = parts[idx];
     const isLeft = letter === di.left;
     const sc = scores[idx];
-    const pct = Math.round((8 - Math.max(-8, Math.min(8, sc))) / 16 * 100);
+    const pct = Math.round((20 - Math.max(-20, Math.min(20, sc))) / 40 * 100);
     const y = dimY + idx * 68;
 
     ctx.fillStyle = '#bbb';
@@ -720,8 +738,8 @@ function renderLanding() {
       <div class="logo">FIND</div>
       <div class="sub">Finance INdividual Diagnostic</div>
       <div class="tagline">财务人的<br>16型人格测试</div>
-      <div class="desc">32道题 · 约5分钟 · 看看自己是哪一种</div>
-      <div class="info-capsule"><span>5 分钟</span><span class="info-sep"></span><span>32 题</span><span class="info-sep"></span><span>不上传数据</span></div>
+      <div class="desc">40道题 · 约7分钟 · 看看自己是哪一种</div>
+      <div class="info-capsule"><span>7 分钟</span><span class="info-sep"></span><span>40 题</span><span class="info-sep"></span><span>不上传数据</span></div>
       <button class="btn btn-accent block" onclick="navigate('/test')">开始测试</button>
       <div style="margin-top:14px">
         <button class="btn outline block" style="font-size:14px" onclick="navigate('/types')">查看 16 型人格图鉴</button>
@@ -791,7 +809,7 @@ function renderAbout() {
       </div>
       <div style="background:#fff;border-radius:12px;padding:16px;margin:20px 0;box-shadow:0 1px 2px rgba(0,0,0,.03)">
         <div style="font-size:13px;font-weight:700;margin-bottom:6px">计分规则</div>
-        <div style="font-size:13px;color:#888;line-height:1.8">每维度 8 道题。答案 A(+1) / B(0) / C(-1)。总分 -8 到 +8。正分取左侧字母，负分取右侧字母，组合成四位代码。</div>
+        <div style="font-size:13px;color:#888;line-height:1.8">每维度 10 道题，5 级选项。答案 A(+2) / B(+1) / C(0) / D(-1) / E(-2)。总分 -20 到 +20。正分取左侧字母，负分取右侧字母，组合成四位代码。</div>
       </div>
       <div style="font-size:12px;color:#bbb;line-height:1.8;margin-top:14px">
         本测试仅供娱乐参考。数据在浏览器本地处理，不上传。每个类型都有对应优势场景，没有好坏之分。
@@ -831,7 +849,7 @@ function renderQuestion() {
   html += `<div class="q-num">Q${idx+1} · ${DIMS[q.dim].label}</div>`;
   html += `<div class="q-statement">${q.q}</div>`;
   html += `<div class="q-options">`;
-  const opts = [{label:'A',text:q.a},{label:'B',text:q.b},{label:'C',text:q.c}];
+  const opts = [{label:'A',text:q.a},{label:'B',text:q.b},{label:'C',text:q.c},{label:'D',text:q.d},{label:'E',text:q.e}];
   opts.forEach((o, oi) => {
     const picked = ans === oi ? ' picked' : '';
     html += `<button class="q-opt${picked}" onclick="pickAnswer(${q.id},${oi})">${o.label}. ${o.text}</button>`;
@@ -889,11 +907,12 @@ function renderResultDimensions(scores) {
     const isLeft = sc >= 0;
     const side = isLeft ? di.left : di.right;
     const other = isLeft ? di.right : di.left;
-    const pct = Math.round((8 - Math.max(-8, Math.min(8, sc))) / 16 * 100);
+    const pct = Math.round((20 - Math.max(-20, Math.min(20, sc))) / 40 * 100);
 
     h += '<div class="dim-card">';
     h += '<div class="dim-card-header">';
     h += `<span class="dim-card-label">${di.label}</span>`;
+    h += `<span class="dim-card-score" style="color:${sc>=0?DIM_COLORS[side.code]:DIM_COLORS[other.code]}">${sc>=0?'+':''}${sc}分</span>`;
     h += `<span class="dim-card-letter">${side.code}</span>`;
     h += '</div>';
     h += '<div class="dim-track">';
