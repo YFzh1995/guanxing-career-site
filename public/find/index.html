@@ -29,7 +29,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .landing .tagline{font-size:22px;font-weight:700;line-height:1.5;margin-bottom:8px}
 .landing .desc{font-size:14px;color:#666;margin-bottom:40px}
 .landing .info-row{display:flex;justify-content:center;gap:28px;margin-bottom:36px;font-size:13px;color:#aaa}
-.landing .info-capsule{display:inline-flex;align-items:center;background:rgba(255,255,255,.7);border-radius:20px;padding:8px 18px;font-size:13px;color:#999;margin-bottom:36px;box-shadow:0 1px 2px rgba(0,0,0,.02)}
+.landing .info-capsule{display:inline-flex;align-items:center;background:#fff;border-radius:20px;padding:8px 18px;font-size:13px;color:#999;margin-bottom:36px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
 .info-capsule .info-sep{width:1px;height:12px;background:#d5cdc0;margin:0 12px}
 .gallery-link{font-size:13px;color:#aaa;cursor:pointer;text-decoration:none;transition:color .15s}
 .gallery-link:hover{color:#666}
@@ -714,56 +714,57 @@ function renderLanding() {
       <div style="margin-top:14px">
         <button class="btn outline block" style="font-size:14px" onclick="navigate('/types')">查看 16 型人格图鉴</button>
       </div>
-      <div style="margin-top:10px">
-        <button class="btn outline block" style="font-size:14px;font-weight:500;color:#888;border-color:#ddd" onclick="navigate('/about')">了解底层逻辑</button>
+      <div style="margin-top:12px">
+        <a class="gallery-link" onclick="navigate('/about')" style="font-size:13px">四维十六型是怎么划分的？</a>
       </div>
       <div class="disclaimer">FIND · 财务人的16型人格 · 仅供娱乐</div>
     </div>`;
 }
 
 function renderAbout() {
+  const DC = DIM_COLORS;
   document.getElementById('app').innerHTML = `
     <button class="nav-back" onclick="navigate('/')">← 返回首页</button>
     <div class="card">
-      <div style="text-align:center;padding:20px 0 16px">
-        <div style="font-size:44px;font-weight:900;letter-spacing:6px;margin-bottom:2px;">FIND</div>
-        <div style="font-size:13px;color:#999;">Finance INdividual Diagnostic</div>
-        <h1 style="font-size:20px;margin-top:20px;margin-bottom:8px">四维十六型 · 底层逻辑</h1>
-        <p style="font-size:14px;color:#888;line-height:1.7">财务人职业生涯的四把尺子。<br>量出来不是对错——是你的默认设置。</p>
+      <div style="text-align:center;padding:20px 0 12px">
+        <div style="font-size:36px;font-weight:900;letter-spacing:6px;margin-bottom:2px;">FIND</div>
+        <div style="font-size:12px;color:#bbb;">Finance INdividual Diagnostic</div>
+        <h1 style="font-size:20px;margin-top:24px;margin-bottom:6px">四维十六型 · 底层逻辑</h1>
+        <p style="font-size:14px;color:#999;line-height:1.7;margin-bottom:0">量出来的不是对错 — 是你的默认设置。</p>
       </div>
-      <div style="background:#1a1a1a;color:#fff;padding:20px;border-radius:12px;text-align:center;margin:8px 0 24px">
-        <div style="font-size:13px;color:#999;margin-bottom:6px">类型代码 = 四个维度的组合</div>
-        <div style="font-size:26px;font-weight:900;letter-spacing:4px;font-family:monospace">2 × 2 × 2 × 2 = 16</div>
-        <div style="font-size:12px;color:#888;margin-top:6px">L/C × D/B × R/S × T/E</div>
+      <div style="background:#1a1a1a;color:#fff;padding:20px;border-radius:12px;text-align:center;margin:20px 0 24px">
+        <div style="font-size:12px;color:#999;margin-bottom:4px">四个维度各取一极，组合成类型代码</div>
+        <div style="font-size:28px;font-weight:900;letter-spacing:4px">2 × 2 × 2 × 2 = 16</div>
+        <div style="font-size:12px;color:#888;margin-top:4px">L/C · D/B · R/S · T/E</div>
       </div>
-      <div class="dim-card" style="margin-bottom:12px">
-        <div class="dim-card-header"><span class="dim-card-label">职业主线</span><span style="font-size:13px;color:#b8956a">方向感</span></div>
-        <div class="dim-labels"><span class="l-active">L 聚焦</span><span>C 分散</span></div>
-        <div class="dim-insight" style="font-size:13px">知道自己往哪走 VS 经历丰富但主线不明显。这是你能不能说清自己从哪来、往哪去。</div>
+      <div class="dim-card" style="margin-bottom:10px;border-left-color:${DC.L}">
+        <div class="dim-card-header"><span class="dim-card-label">职业主线</span><span style="font-size:12px;color:${DC.L}">方向感</span></div>
+        <div class="dim-labels" style="color:#666"><span>L 聚焦</span><span>C 分散</span></div>
+        <div class="dim-insight" style="font-size:13px">知道自己往哪走，还是一路试过来再说 — 你能说清自己从哪来、到哪去吗。</div>
       </div>
-      <div class="dim-card" style="margin-bottom:12px">
-        <div class="dim-card-header"><span class="dim-card-label">风险偏好</span><span style="font-size:13px;color:#c97a5a">趋避倾向</span></div>
-        <div class="dim-labels"><span class="l-active">R 进取</span><span>S 稳健</span></div>
-        <div class="dim-insight" style="font-size:13px">看到机会先兴奋 VS 出发前先看好地形。面对不确定性，习惯往前迈还是先站稳。</div>
+      <div class="dim-card" style="margin-bottom:10px;border-left-color:${DC.R}">
+        <div class="dim-card-header"><span class="dim-card-label">风险偏好</span><span style="font-size:12px;color:${DC.R}">趋避倾向</span></div>
+        <div class="dim-labels" style="color:#666"><span>R 进取</span><span>S 稳健</span></div>
+        <div class="dim-insight" style="font-size:13px">面对不确定性，你习惯往前迈一步，还是先站稳脚跟再看。</div>
       </div>
-      <div class="dim-card" style="margin-bottom:12px">
-        <div class="dim-card-header"><span class="dim-card-label">决策模式</span><span style="font-size:13px;color:#7a9b7a">行动节奏</span></div>
-        <div class="dim-labels"><span class="l-active">T 谋定</span><span>E 即行</span></div>
-        <div class="dim-insight" style="font-size:13px">想清楚再动手 VS 行动中调整方向。先算好再走，还是边走边调。</div>
+      <div class="dim-card" style="margin-bottom:10px;border-left-color:${DC.T}">
+        <div class="dim-card-header"><span class="dim-card-label">决策模式</span><span style="font-size:12px;color:${DC.T}">行动节奏</span></div>
+        <div class="dim-labels" style="color:#666"><span>T 谋定</span><span>E 即行</span></div>
+        <div class="dim-insight" style="font-size:13px">你是先把每一步算清楚再走，还是边走边调整方向。</div>
       </div>
-      <div class="dim-card" style="margin-bottom:12px">
-        <div class="dim-card-header"><span class="dim-card-label">能力深度</span><span style="font-size:13px;color:#8a7a65">能力结构</span></div>
-        <div class="dim-labels"><span class="l-active">D 专深</span><span>B 广博</span></div>
-        <div class="dim-insight" style="font-size:13px">像钉子，一招制胜 VS 像万用扳手，什么都能拧。价值体现更多在深度还是广度。</div>
+      <div class="dim-card" style="margin-bottom:10px;border-left-color:${DC.D}">
+        <div class="dim-card-header"><span class="dim-card-label">能力深度</span><span style="font-size:12px;color:${DC.D}">能力结构</span></div>
+        <div class="dim-labels" style="color:#666"><span>D 专深</span><span>B 广博</span></div>
+        <div class="dim-insight" style="font-size:13px">像钉子一门深入，还是像万用扳手什么都能接 — 你的价值在深度还是广度。</div>
       </div>
-      <div style="background:#faf7f2;border-radius:12px;padding:16px;margin:20px 0">
-        <div style="font-size:13px;font-weight:700;margin-bottom:8px">计分规则</div>
-        <div style="font-size:13px;color:#666;line-height:1.8">每维度 8 道题。答案 A(+1) / B(0) / C(-1)。总分 -8 到 +8。正分取左侧字母，负分取右侧字母，组合成四位代码。</div>
+      <div style="background:#fff;border-radius:12px;padding:16px;margin:20px 0;box-shadow:0 1px 2px rgba(0,0,0,.03)">
+        <div style="font-size:13px;font-weight:700;margin-bottom:6px">计分规则</div>
+        <div style="font-size:13px;color:#888;line-height:1.8">每维度 8 道题。答案 A(+1) / B(0) / C(-1)。总分 -8 到 +8。正分取左侧字母，负分取右侧字母，组合成四位代码。</div>
       </div>
-      <div style="font-size:12px;color:#bbb;line-height:1.8;margin-top:16px">
-        本测试仅供娱乐和自我认知参考。所有数据在浏览器本地处理，不上传。每个类型都有对应的优势场景，没有好坏之分。
+      <div style="font-size:12px;color:#bbb;line-height:1.8;margin-top:14px">
+        本测试仅供娱乐参考。数据在浏览器本地处理，不上传。每个类型都有对应优势场景，没有好坏之分。
       </div>
-      <div style="margin-top:24px;text-align:center">
+      <div style="margin-top:20px;text-align:center">
         <button class="btn btn-accent block" onclick="navigate('/test')">开始测试</button>
       </div>
     </div>
