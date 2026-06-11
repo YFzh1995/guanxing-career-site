@@ -681,6 +681,7 @@ function route() {
   window.scrollTo(0, 0);
 
   if (hash === '/' || hash === '') renderLanding();
+  else if (hash === '/about') renderAbout();
   else if (hash === '/test') renderTest();
   else if (hash.startsWith('/result/')) {
     currentCode = hash.split('/')[2];
@@ -711,11 +712,60 @@ function renderLanding() {
       <div class="info-capsule"><span>5 分钟</span><span class="info-sep"></span><span>32 题</span><span class="info-sep"></span><span>不上传数据</span></div>
       <button class="btn btn-accent block" onclick="navigate('/test')">开始测试</button>
       <div style="margin-top:20px">
-        <a class="gallery-link" onclick="navigate('/types')">查看 16 型人格图鉴 →</a>
-        <br><a class="gallery-link" href="/find/about" style="font-size:12px">了解底层逻辑</a>
+        <button class="btn outline" style="font-size:14px;padding:12px 28px" onclick="navigate('/types')">查看 16 型人格图鉴</button>
+        <br><a class="gallery-link" onclick="navigate('/about')" style="font-size:12px">四维十六型是怎么来的</a>
       </div>
       <div class="disclaimer">FIND · 财务人的16型人格 · 仅供娱乐</div>
     </div>`;
+}
+
+function renderAbout() {
+  document.getElementById('app').innerHTML = `
+    <button class="nav-back" onclick="navigate('/')">← 返回首页</button>
+    <div class="card">
+      <div style="text-align:center;padding:20px 0 16px">
+        <div style="font-size:44px;font-weight:900;letter-spacing:6px;margin-bottom:2px;">FIND</div>
+        <div style="font-size:13px;color:#999;">Finance INdividual Diagnostic</div>
+        <h1 style="font-size:20px;margin-top:20px;margin-bottom:8px">四维十六型 · 底层逻辑</h1>
+        <p style="font-size:14px;color:#888;line-height:1.7">财务人职业生涯的四把尺子。<br>量出来不是对错——是你的默认设置。</p>
+      </div>
+      <div style="background:#1a1a1a;color:#fff;padding:20px;border-radius:12px;text-align:center;margin:8px 0 24px">
+        <div style="font-size:13px;color:#999;margin-bottom:6px">类型代码 = 四个维度的组合</div>
+        <div style="font-size:26px;font-weight:900;letter-spacing:4px;font-family:monospace">2 × 2 × 2 × 2 = 16</div>
+        <div style="font-size:12px;color:#888;margin-top:6px">L/C × D/B × R/S × T/E</div>
+      </div>
+      <div class="dim-card" style="margin-bottom:12px">
+        <div class="dim-card-header"><span class="dim-card-label">职业主线</span><span style="font-size:13px;color:#b8956a">方向感</span></div>
+        <div class="dim-labels"><span class="l-active">L 聚焦</span><span>C 分散</span></div>
+        <div class="dim-insight" style="font-size:13px">知道自己往哪走 VS 经历丰富但主线不明显。这是你能不能说清自己从哪来、往哪去。</div>
+      </div>
+      <div class="dim-card" style="margin-bottom:12px">
+        <div class="dim-card-header"><span class="dim-card-label">风险偏好</span><span style="font-size:13px;color:#c97a5a">趋避倾向</span></div>
+        <div class="dim-labels"><span class="l-active">R 进取</span><span>S 稳健</span></div>
+        <div class="dim-insight" style="font-size:13px">看到机会先兴奋 VS 出发前先看好地形。面对不确定性，习惯往前迈还是先站稳。</div>
+      </div>
+      <div class="dim-card" style="margin-bottom:12px">
+        <div class="dim-card-header"><span class="dim-card-label">决策模式</span><span style="font-size:13px;color:#7a9b7a">行动节奏</span></div>
+        <div class="dim-labels"><span class="l-active">T 谋定</span><span>E 即行</span></div>
+        <div class="dim-insight" style="font-size:13px">想清楚再动手 VS 行动中调整方向。先算好再走，还是边走边调。</div>
+      </div>
+      <div class="dim-card" style="margin-bottom:12px">
+        <div class="dim-card-header"><span class="dim-card-label">能力深度</span><span style="font-size:13px;color:#8a7a65">能力结构</span></div>
+        <div class="dim-labels"><span class="l-active">D 专深</span><span>B 广博</span></div>
+        <div class="dim-insight" style="font-size:13px">像钉子，一招制胜 VS 像万用扳手，什么都能拧。价值体现更多在深度还是广度。</div>
+      </div>
+      <div style="background:#faf7f2;border-radius:12px;padding:16px;margin:20px 0">
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px">计分规则</div>
+        <div style="font-size:13px;color:#666;line-height:1.8">每维度 8 道题。答案 A(+1) / B(0) / C(-1)。总分 -8 到 +8。正分取左侧字母，负分取右侧字母，组合成四位代码。</div>
+      </div>
+      <div style="font-size:12px;color:#bbb;line-height:1.8;margin-top:16px">
+        本测试仅供娱乐和自我认知参考。所有数据在浏览器本地处理，不上传。每个类型都有对应的优势场景，没有好坏之分。
+      </div>
+      <div style="margin-top:24px;text-align:center">
+        <button class="btn btn-accent block" onclick="navigate('/test')">开始测试</button>
+      </div>
+    </div>
+    <div class="disclaimer">FIND · 财务人的16型人格 · 仅供娱乐</div>`;
 }
 
 function renderTest() {
