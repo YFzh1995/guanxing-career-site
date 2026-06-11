@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#f5f0eb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>FIND · 财务人的16型人格</title>
+<style>
+*,::before,::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:linear-gradient(180deg,#f8f4ee 0%,#ede5d8 100%);background-attachment:fixed;color:#1a1a1a;line-height:1.6;min-height:100dvh;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+.container{max-width:480px;margin:0 auto;padding:20px 20px 60px;padding:20px 20px calc(60px + env(safe-area-inset-bottom, 0px));min-height:100dvh;overscroll-behavior:contain}
+
+.btn{display:inline-block;padding:15px 40px;border-radius:30px;border:none;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s cubic-bezier(.25,.8,.25,1.2);background:#1a1a1a;color:#fff;letter-spacing:.5px}
+.btn:active{transform:scale(.96);opacity:.85}
+.btn-accent{background:#b8956a}
+.btn-accent:active{background:#a6844f}
+.btn.outline{background:transparent;border:1.5px solid #1a1a1a;color:#1a1a1a}
+.btn.block{display:block;width:100%;text-align:center}
+.btn.sm{padding:10px 20px;font-size:13px}
+
+/* landing */
+.landing{text-align:center;padding-top:60px;position:relative}
+.hero-glow{position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(184,149,106,.14) 0%,transparent 65%);pointer-events:none;z-index:-1}
+.landing .logo{font-size:44px;letter-spacing:6px;font-weight:900;color:#1a1a1a;margin-bottom:4px}
+.landing .sub{font-size:13px;color:#999;margin-bottom:32px}
+.landing .tagline{font-size:22px;font-weight:700;line-height:1.5;margin-bottom:8px}
+.landing .desc{font-size:14px;color:#666;margin-bottom:40px}
+.landing .info-row{display:flex;justify-content:center;gap:28px;margin-bottom:36px;font-size:13px;color:#aaa}
+.landing .info-capsule{display:inline-flex;align-items:center;background:rgba(255,255,255,.7);border-radius:20px;padding:8px 18px;font-size:13px;color:#999;margin-bottom:36px;box-shadow:0 1px 2px rgba(0,0,0,.02)}
+.info-capsule .info-sep{width:1px;height:12px;background:#d5cdc0;margin:0 12px}
+.gallery-link{font-size:13px;color:#aaa;cursor:pointer;text-decoration:none;transition:color .15s}
+.gallery-link:hover{color:#666}
+
+/* card */
+.card{background:#fff;border-radius:16px;padding:28px 24px;box-shadow:0 1px 2px rgba(0,0,0,.02),0 4px 12px rgba(0,0,0,.04);margin-bottom:16px}
+.card h1{font-size:20px;font-weight:700;margin-bottom:8px}
+.card h2{font-size:17px;font-weight:600;margin-bottom:16px}
+
+/* progress */
+.progress-wrap{margin-bottom:20px}
+.progress-bar{height:6px;background:#e8e2d8;border-radius:3px;overflow:hidden;margin-bottom:6px}
+.progress-fill{height:100%;background:linear-gradient(90deg,#1a1a1a 0%,#b8956a 100%);border-radius:3px;transition:width .4s ease}
+.progress-info{display:flex;justify-content:space-between;font-size:12px;color:#aaa}
+
+/* question */
+.q-wrap{position:relative;min-height:200px}
+.q-card{background:#fff;border-radius:16px;padding:32px 24px;box-shadow:0 1px 2px rgba(0,0,0,.02),0 4px 12px rgba(0,0,0,.04);transition:opacity .2s,transform .2s}
+.q-card.enter-right{animation:slideInRight .25s ease-out}
+.q-card.enter-left{animation:slideInLeft .25s ease-out}
+.q-dim-hint{font-size:11px;color:#b8956a;letter-spacing:2px;margin-bottom:8px}
+@keyframes slideInRight{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+.q-num{font-size:13px;color:#bbb;margin-bottom:12px}
+.q-statement{font-size:18px;line-height:1.7;font-weight:500;margin-bottom:24px}
+.q-options{display:flex;flex-direction:column;gap:10px}
+.q-opt{display:block;width:100%;text-align:left;padding:15px 18px;border-radius:12px;border:1.5px solid #e8e2d8;background:#faf8f5;font-size:15px;color:#2c2c2c;cursor:pointer;transition:all .15s;line-height:1.5}
+.q-opt:hover{background:#f2ece0;border-color:#d5cdb8}
+.q-opt:active{background:#ede5d5;border-color:#c8bfa8}
+.q-opt.picked{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+
+.q-nav{display:flex;gap:12px;margin-top:16px}
+.q-nav button{flex:1}
+
+/* result */
+.result-top{text-align:center;padding:56px 0 20px}
+.result-avatar{width:180px;height:180px;margin:-36px auto 0}
+.result-avatar svg{width:100%;height:100%;display:block}
+.result-char{font-size:15px;font-weight:700;color:#b8956a;margin:6px 0 4px;letter-spacing:1px}
+.result-code{font-size:36px;font-weight:900;letter-spacing:5px;margin-bottom:2px}
+.result-name{font-size:17px;font-weight:600;color:#999;margin-bottom:0}
+.result-desc{font-size:15px;line-height:1.9;color:#555}
+.result-spectra{margin:24px 0}
+.share-actions{display:flex;flex-direction:column;gap:10px;margin-top:24px}
+
+/* type gallery */
+.types-header{text-align:center;padding:20px 0}
+.types-header h1{font-size:22px;margin-bottom:4px}
+.types-header p{font-size:14px;color:#888}
+.types-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.type-cell{background:#fff;border-radius:14px;padding:20px 16px;text-align:center;box-shadow:0 1px 2px rgba(0,0,0,.03);cursor:pointer;transition:all .15s;text-decoration:none;color:inherit;display:block;position:relative;overflow:hidden}
+.type-cell::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 130%,var(--tc,#f0ebe0) 0%,transparent 70%);opacity:.1;z-index:0;transition:opacity .2s}
+.type-cell:active{transform:scale(.97)}
+.type-cell:active::before{opacity:.2}
+.type-cell>*{position:relative;z-index:1}
+.type-cell .t-code{font-size:11px;color:#bbb;letter-spacing:2px;margin-bottom:6px}
+.type-cell .t-name{font-size:16px;font-weight:700;margin-bottom:6px}
+.t-avatar{width:96px;height:96px;margin:0 auto 2px}
+.t-avatar svg{width:100%;height:100%;display:block}
+.t-char{font-size:12px;font-weight:700;margin-bottom:2px;letter-spacing:1px}
+
+/* related types */
+.related{margin-top:28px}
+.related-title{font-size:11px;color:#bbb;margin-bottom:14px;text-align:center;letter-spacing:3px;text-transform:uppercase}
+.related-list{display:flex;gap:10px}
+.related-item{flex:1;background:#fff;border-radius:12px;padding:14px;text-align:center;box-shadow:0 1px 2px rgba(0,0,0,.03);cursor:pointer;transition:all .12s;text-decoration:none;color:inherit;display:block}
+.related-item:active{transform:scale(.96)}
+.related-item .r-code{font-size:10px;color:#bbb;margin-bottom:2px}
+.related-item .r-name{font-size:13px;font-weight:600}
+
+/* detail page */
+.detail-dims{margin:24px 0}
+.dim-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:13px}
+.dim-row .d-code{font-weight:800;font-size:18px;width:24px;text-align:center}
+.dim-row .d-label{color:#888;min-width:40px;font-size:12px}
+.dim-row .d-track{flex:1;position:relative;height:28px;display:flex;align-items:center}
+.dim-row .d-line{position:absolute;left:0;right:0;height:2px;background:#e8e2d8}
+.dim-row .d-dot{width:12px;height:12px;border-radius:50%;background:#1a1a1a;position:relative;z-index:1;box-shadow:0 0 0 4px rgba(26,26,26,.06)}
+
+/* nav */
+.nav-back{display:flex;align-items:center;gap:4px;font-size:14px;color:#888;cursor:pointer;margin-bottom:16px;background:none;border:none;padding:0}
+.nav-back:active{color:#1a1a1a}
+
+/* share modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal-content{background:#fff;border-radius:16px;padding:20px;max-width:320px;width:100%;text-align:center}
+.modal-content img{width:100%;border-radius:8px;margin-bottom:12px}
+.modal-close{margin-top:12px}
+
+/* type peek modal */
+.tmodal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:24px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.tmodal-card{background:#fff;border-radius:16px;padding:24px;max-width:400px;width:100%;max-height:80vh;overflow-y:auto;position:relative;box-shadow:0 8px 32px rgba(0,0,0,.12);animation:tmodalIn .2s ease-out}
+@keyframes tmodalIn{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.tmodal-close{position:absolute;top:12px;right:14px;width:32px;height:32px;border-radius:50%;border:none;background:rgba(0,0,0,.05);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#999;transition:all .15s;line-height:1}
+.tmodal-close:hover{background:rgba(0,0,0,.1);color:#333}
+.tmodal-card .result-code{font-size:40px}
+.tmodal-card .result-avatar{width:120px;height:120px;margin:-24px auto 0}
+.tmodal-card .result-char{font-size:13px}
+.tmodal-card .result-tagline{font-size:14px}
+.tmodal-card .result-code{font-size:32px}
+.tmodal-card .result-desc{font-size:14px}
+
+/* footer */
+.footer{text-align:center;font-size:11px;color:#ccc;padding:24px 0;margin-top:32px}
+
+.disclaimer{font-size:12px;color:#ccc;text-align:center;margin-top:32px}
+
+/* toast */
+.toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1a1a1a;color:#fff;padding:12px 24px;border-radius:20px;font-size:14px;z-index:300;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+
+.hidden{display:none!important}
+
+/* result redesign */
+.result-divider{width:40px;height:1px;background:#d5cdc0;margin:28px auto;border:none}
+.result-section-title{font-size:11px;color:#aaa;text-align:center;margin:32px 0 16px;letter-spacing:4px;text-transform:uppercase}
+.result-tagline{font-size:15px;color:#666;text-align:center;margin:8px 0 24px;line-height:1.8;font-style:italic}
+.dim-card{background:#faf7f2;border-radius:12px;padding:18px 20px;margin-bottom:12px;border-left:3px solid #b8956a}
+.dim-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.dim-card-label{font-size:13px;font-weight:600;color:#1a1a1a}
+.dim-card-letter{font-size:22px;font-weight:900;letter-spacing:1px;color:#b8956a}
+.dim-track{position:relative;height:6px;margin-bottom:6px;background:#e8e2d8;border-radius:3px}
+.dim-fill{position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,#b8956a 0%,#d4bc8c 100%);border-radius:3px;transition:width .3s ease}
+.dim-dot{position:absolute;top:50%;width:14px;height:14px;background:#b8956a;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 4px rgba(184,149,106,.12);z-index:2}
+.dim-labels{display:flex;justify-content:space-between;font-size:12px;color:#bbb;margin-bottom:10px}
+.dim-labels .l-active{color:#1a1a1a;font-weight:700}
+.dim-insight{font-size:13px;color:#666;line-height:1.6;background:#fff;border-radius:8px;padding:10px 12px}
+
+@media(max-width:380px){
+  .q-statement{font-size:16px}
+  .result-code{font-size:28px}
+}
+</style>
+</head>
+<body>
+<div class="container" id="app"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════
+const QUESTIONS = [
+  { id:1,  dim:0, q:"我属于那种每一步都知道自己往哪走的人。", a:"是的", b:"差不多", c:"不太是" },
+  { id:2,  dim:0, q:"面试官问职业规划——我不慌，心里是有方向的。", a:"是的", b:"有点方向", c:"不太有" },
+  { id:3,  dim:0, q:"我的职业经历能串成一条比较清楚的线。", a:"能", b:"部分能", c:"不太能" },
+  { id:4,  dim:0, q:"我的简历一看就有比较明确的主线。", a:"有", b:"有一点", c:"不太有" },
+  { id:5,  dim:0, q:"我换工作之前一般都想清楚了为什么要换。", a:"是的", b:"有时候", c:"换完了才想" },
+  { id:6,  dim:0, q:"方向这件事上，我算是搞清楚了的。", a:"是的", b:"大概有", c:"还在找" },
+  { id:7,  dim:0, q:"三五年后想做什么——这个问题难不倒我。", a:"难不倒", b:"能说一点", c:"难" },
+  { id:8,  dim:0, q:"我的职业路径更像：一条有方向的河，不是到处分叉的树。", a:"更像河", b:"介于两者", c:"更像树" },
+  { id:9,  dim:1, q:"新的机会出现，我一般是那个先举手的人。", a:"是的", b:"看情况", c:"一般不会" },
+  { id:10, dim:1, q:"「这事一定能成」——听到这话我会先兴奋，不是先怀疑。", a:"先兴奋", b:"一半一半", c:"先怀疑" },
+  { id:11, dim:1, q:"裸辞这件事，我做得出来。", a:"做得出来", b:"看存款", c:"做不到" },
+  { id:12, dim:1, q:"回头看，没做的事比做了的事更让我惦记。", a:"没做的更惦记", b:"差不多", c:"做了的更后悔" },
+  { id:13, dim:1, q:"在一个地方待十二年——想想就觉得该换换了。", a:"待不住", b:"地方好也许可以", c:"我可以" },
+  { id:14, dim:1, q:"被调到陌生业务线，我先看有什么新机会。", a:"先看机会", b:"一边确认一边看", c:"先确认安全" },
+  { id:15, dim:1, q:"「太稳定」这件事会让我有点慌。", a:"会的", b:"有一点", c:"不会" },
+  { id:16, dim:1, q:"「试一下又不会死」——这话我是信的。", a:"信的", b:"分情况", c:"不信" },
+  { id:17, dim:2, q:"我习惯先把事情想清楚，再动手。", a:"是的", b:"看什么事", c:"先动再说" },
+  { id:18, dim:2, q:"一封邮件发出去之前，我一般会再看一遍。", a:"会的", b:"偶尔", c:"不会" },
+  { id:19, dim:2, q:"临时被叫去做决定——我会觉得不太舒服。", a:"不舒服", b:"看什么事", c:"还好" },
+  { id:20, dim:2, q:"别人已经跳到下一个话题了，我还在想上一个。", a:"经常这样", b:"偶尔", c:"不会" },
+  { id:21, dim:2, q:"做了决定之后，我会忍不住复盘有没有漏洞。", a:"会的", b:"偶尔", c:"不太会" },
+  { id:22, dim:2, q:"我的问题不是方向错了，是想太久了。", a:"想太久是卡点", b:"有时候", c:"不是" },
+  { id:23, dim:2, q:"「先开枪再瞄准」——这种事我干不出来。", a:"干不出来", b:"偶尔可以", c:"我就是这样的" },
+  { id:24, dim:2, q:"十次讨论里，我大多是先听完，最后才开口的那个。", a:"是的", b:"一半一半", c:"不是" },
+  { id:25, dim:3, q:"我有一个能拿得出手的专长方向。", a:"有", b:"有一点", c:"什么都会一点" },
+  { id:26, dim:3, q:"部门里一个难题卡住了，最后我能解决——这种事发生过。", a:"不止一次", b:"一两次", c:"不太有" },
+  { id:27, dim:3, q:"我不太担心简历上体现不出价值，因为方向比较聚焦。", a:"是的", b:"有点担心", c:"挺担心的" },
+  { id:28, dim:3, q:"有些东西不是新同事三个月就能接手的。", a:"是的", b:"部分能部分不能", c:"大部分都能" },
+  { id:29, dim:3, q:"我的价值更多体现在深度上，不是广度上。", a:"更多是深度", b:"一半一半", c:"更多是广度" },
+  { id:30, dim:3, q:"「你的核心竞争力是什么」——这个问题我能比较快地说出来。", a:"能", b:"想一下能", c:"不太好说" },
+  { id:31, dim:3, q:"有一两件事，我知道自己是部门里做得最好的。", a:"有", b:"可能有一两件", c:"不太有" },
+  { id:32, dim:3, q:"用一句话形容我的能力——像一个钉子，不是一块板子。", a:"更像钉子", b:"介于两者", c:"更像板子" },
+];
+
+const TYPES = {
+  'L-D-R-T':{name:'谋定后动型',character:'暗中观察',tagline:'等我算完，答案自然就有了。',desc:'开会沉默到最后，想法还在后台跑计算。弹出结果时已经散会了，只好私发组长。组长回了一句：下次早点。'},
+  'L-D-R-E':{name:'一击必中型',character:'我先来',tagline:'先干了再说，改总比不动强。',desc:'新任务丢过来他第一个点头。不是最有把握，是受不了讨论停在"要不要做"。方案细节不够多但方向没偏过。改是要改的，至少不用再讨论开不开会了。'},
+  'L-D-S-T':{name:'稳中求进型',character:'三遍怪',tagline:'你可以催我，但别想让我出错。',desc:'邮件发出去之前看三遍。第一遍看事实，第二遍看语气，第三遍其实和第二遍差不多但他就是忍不住。最后一个回复的人，也是唯一没被追问过"你确认过吗"的人。'},
+  'L-D-S-E':{name:'稳中求变型',character:'八爪章鱼',tagline:'换个地方，接着做我擅长的事。',desc:'三年换三个部门。新同事问他之前做什么，说完对方愣了一秒——听起来和现在干的差不多。他笑了笑说对，我就是换个楼层接着做一样的事。'},
+  'L-B-R-T':{name:'蓝图待建型',character:'画梦人',tagline:'方案可以更好，先别急着执行。',desc:'立项期最出彩的人，框架漂亮时间线清晰。大家鼓掌。然后他花了两周调框架细节。第三周别人问进展，他说已经到第四版了——第一版还没执行。'},
+  'L-B-R-E':{name:'逢山开路型',character:'平头哥',tagline:'不会？下周我就会了。',desc:'不会的事从来不先承认不会。接完两周疯狂补习到能培训别人。同事觉得他什么都会。他自己知道——会的有一半是上周二学的。'},
+  'L-B-S-T':{name:'步步为营型',character:'水獭',tagline:'你看最后一页就好，我每一页都对了。',desc:'任何汇报都准备三版：完整版、摘要版、一分钟版。领导只看最后一页。但他在意的是——那一页也是对的。'},
+  'L-B-S-E':{name:'日拱一卒型',character:'愚公移山',tagline:'不急，每天做一点就够了。',desc:'不炸场也不焦虑。别人冲刺他在走，别人歇了他还在走。年终复盘大家发现活干完了明年计划也列好了。问怎么做到，说每天做一点。说完继续做去了。'},
+  'C-D-R-T':{name:'剑藏于鞘型',character:'扫地僧',tagline:'看起来不像，但我是最会的那一个。',desc:'履历看起来像没想明白要干什么。但有一两件事整个楼层他做得最好。偶尔难题卡所有人两天，他路过看了一眼：这个我处理过。十分钟解决，继续路过。'},
+  'C-D-R-E':{name:'浪里试剑型',character:'浪里白',tagline:'组织架构调整？这才第四轮。',desc:'待过的公司种类比别人职级变化还多。每次组织架构调整面不改色——又不是第一次了。新同事一脸紧张问他怎么办，他说没事经历四轮了。对方不知道该放心还是该替他难过。'},
+  'C-D-S-T':{name:'深耕待时型',character:'卧龙',tagline:'不急，聚光灯早晚会转过来。',desc:'新人搞不定的问题最后还是来找他。擅长的事暂时不在聚光灯下。不急。哪天又要用到这个领域的时候——他还是那个唯一搞得定的人。'},
+  'C-D-S-E':{name:'投石问路型',character:'斥候',tagline:'每条路我都探过了，心中有数。',desc:'不押一个方向。每条路先走一小段试试。今天帮这个项目组明天蹭那个部门会。方向没定但已经攒了精确地图——每条路走多少步遇什么都有数。'},
+  'C-B-R-T':{name:'雾中沉思型',character:'CPU',tagline:'再给我点时间，六个角度还没辩完。',desc:'一个问题上六个角度分析。利弊讲清楚后大家问选哪个——再想想。六个角度在脑子里抬杠谁也说服不了谁。下一次开会的时候还在想。'},
+  'C-B-R-E':{name:'赤手前行型',character:'愣头青',tagline:'跑起来再说，停着比撞墙更累。',desc:'新项目第一个举手。没想清楚适不适合，先上再说。撞墙了换路撞穿了换方向。同事问不累吗。他说累，但比坐在原地看着别人跑舒服一点。'},
+  'C-B-S-T':{name:'围城守望型',character:'老司机',tagline:'地图给你了，走不走随你。',desc:'新来的同事喜欢找他。每个问题都讲前因后果，最后加一句"当然现在不一定适用了"。他没说行不行。只是把地图摊开了。路你自己走。'},
+  'C-B-S-E':{name:'暗夜寻光型',character:'搬砖王',tagline:'行吧，这次真的是最后一次了。',desc:'年结加班名单上永远有他。不是觉悟高，是别人推开的活全流他桌上。忙完说下次拒绝，下次又说行吧。同事说他是最靠谱的人。他有时候希望自己没那么靠谱。'},
+};
+
+const DIMS = [
+  { left:'L',ln:'聚焦', right:'C',rn:'分散', label:'职业主线' },
+  { left:'R',ln:'进取', right:'S',rn:'稳健', label:'风险偏好' },
+  { left:'T',ln:'谋定', right:'E',rn:'即行', label:'决策模式' },
+  { left:'D',ln:'专深', right:'B',rn:'广博', label:'能力深度' },
+];
+
+const DIM_INSIGHTS = [
+  { label:'职业主线', left:{code:'L',name:'聚焦',insight:'清楚自己的职业主线在哪，每一步都踩在方向上。'}, right:{code:'C',name:'分散',insight:'经历丰富但不聚焦，需要把碎片串成一条主线。'} },
+  { label:'风险偏好', left:{code:'R',name:'进取',insight:'看到机会先兴奋，不是先怀疑。'}, right:{code:'S',name:'稳健',insight:'求稳是底色，出发前先看好地形。'} },
+  { label:'决策模式', left:{code:'T',name:'谋定',insight:'想清楚了才动手，动手了就不留漏洞。'}, right:{code:'E',name:'即行',insight:'先动再说，行动中不断调整方向。'} },
+  { label:'能力深度', left:{code:'D',name:'专深',insight:'有一两件事，是部门里做得最好的。'}, right:{code:'B',name:'广博',insight:'什么都会一点，跨领域接活是你的优势。'} },
+];
+
+// RELATED: nearest neighbors (diff by exactly one dimension)
+const CODE_ORDER = [0,3,1,2]; // L/C, D/B, R/S, T/E
+const TYPE_COLORS = {
+  'L-D-R-T':'#b8956a','C-D-R-T':'#8a7a65','L-D-R-E':'#c97a5a','C-D-R-E':'#9b7a6a',
+  'L-D-S-T':'#7a9b7a','C-D-S-T':'#8a8a7a','L-D-S-E':'#8898a0','C-D-S-E':'#8a8580',
+  'L-B-R-T':'#b8956a','C-B-R-T':'#8a7a65','L-B-R-E':'#c97a5a','C-B-R-E':'#9b7a6a',
+  'L-B-S-T':'#7a9b7a','C-B-S-T':'#8a8a7a','L-B-S-E':'#8898a0','C-B-S-E':'#8a8580',
+};
+const DIM_COLORS = { 'L':'#b8956a','C':'#8a7a65','R':'#c97a5a','S':'#78909c','T':'#7a9b7a','E':'#c9a455','D':'#8a7a65','B':'#cca87a' };
+function avatarSVG(code) {
+  const clr = TYPE_COLORS[code], dk = '#1a1a1a', sk = '#fbf7f2';
+  const char = TYPES[code].character;
+  const bg = '<rect width="100" height="140" rx="16" fill="'+clr+'" opacity=".07"/>';
+  const body = '<ellipse cx="50" cy="132" rx="34" ry="8" fill="'+clr+'" opacity=".08"/>';
+  const FS = 'fill="'+sk+'" stroke="'+clr+'" stroke-width="2"';
+
+  // ── Character definition: [face_shape, hair, eyes, mouth, brows, props] ──
+  const C = {
+  '暗中观察':[ // owl — huge piercing eyes, glasses, ear tufts
+    '<ellipse cx="50" cy="58" rx="30" ry="33" '+FS+'/>',
+    '<polygon points="30,28 34,10 40,28" fill="'+clr+'"/><polygon points="60,28 66,10 70,28" fill="'+clr+'"/>',
+    '<circle cx="40" cy="52" r="14" fill="none" stroke="'+clr+'" stroke-width="2"/><circle cx="60" cy="52" r="14" fill="none" stroke="'+clr+'" stroke-width="2"/><circle cx="40" cy="54" r="8" fill="'+clr+'"/><circle cx="60" cy="54" r="8" fill="'+clr+'"/><circle cx="42" cy="50" r="2.5" fill="#fff"/><circle cx="58" cy="50" r="2.5" fill="#fff"/>',
+    '<polygon points="48,68 50,73 52,68" fill="'+clr+'"/>',
+    '<line x1="26" y1="42" x2="40" y2="44" stroke="'+dk+'" stroke-width="2" stroke-linecap="round"/><line x1="60" y1="44" x2="74" y2="42" stroke="'+dk+'" stroke-width="2" stroke-linecap="round"/>',
+    '<line x1="34" y1="52" x2="66" y2="52" stroke="'+clr+'" stroke-width="1.5"/><circle cx="50" cy="86" r="4" fill="'+clr+'" opacity=".15"/>'
+  ],
+  '我先来':[ // raised hand, leaning forward
+    '<ellipse cx="50" cy="56" rx="26" ry="30" '+FS+'/>',
+    '<path d="M28 38 Q36 16 50 14 Q64 16 72 38" fill="'+clr+'" opacity=".35"/>',
+    '<circle cx="40" cy="50" r="6" fill="'+dk+'"/><circle cx="60" cy="50" r="6" fill="'+dk+'"/><circle cx="42" cy="48" r="2" fill="#fff"/><circle cx="58" cy="48" r="2" fill="#fff"/>',
+    '<path d="M38 66 Q50 78 62 66" fill="none" stroke="'+dk+'" stroke-width="2.2" stroke-linecap="round"/>',
+    '<line x1="32" y1="40" x2="44" y2="36" stroke="'+dk+'" stroke-width="2.5" stroke-linecap="round"/><line x1="56" y1="36" x2="68" y2="40" stroke="'+dk+'" stroke-width="2.5" stroke-linecap="round"/>',
+    '<circle cx="78" cy="30" r="10" fill="'+clr+'" opacity=".2"/><line x1="78" y1="18" x2="78" y2="10" stroke="'+clr+'" stroke-width="3" stroke-linecap="round"/><line x1="68" y1="14" x2="88" y2="14" stroke="'+clr+'" stroke-width="3" stroke-linecap="round"/><rect x="72" y="4" width="12" height="8" rx="3" fill="'+clr+'"/>'
+  ],
+  '三遍怪':[ // scrutinizing paper with checkmarks
+    '<ellipse cx="50" cy="52" rx="28" ry="30" '+FS+'/>',
+    '<path d="M30 34 Q40 18 50 16 Q60 18 70 34" fill="'+dk+'" opacity=".2"/>',
+    '<circle cx="40" cy="48" r="5" fill="'+dk+'"/><circle cx="60" cy="48" r="5" fill="'+dk+'"/>',
+    '<line x1="44" y1="62" x2="56" y2="62" stroke="'+dk+'" stroke-width="1.8" stroke-linecap="round"/>',
+    '<line x1="32" y1="40" x2="44" y2="44" stroke="'+dk+'" stroke-width="2" stroke-linecap="round"/><line x1="56" y1="44" x2="68" y2="40" stroke="'+dk+'" stroke-width="2" stroke-linecap="round"/>',
+    '<rect x="20" y="68" width="24" height="30" rx="3" fill="#fff" stroke="'+dk+'" stroke-width="1"/><line x1="26" y1="78" x2="38" y2="78" stroke="'+dk+'" stroke-width=".8"/><line x1="26" y1="84" x2="34" y2="84" stroke="'+dk+'" stroke-width=".8"/><line x1="26" y1="90" x2="36" y2="90" stroke="'+dk+'" stroke-width=".8"/><text x="36" y="80" font-size="10" fill="'+clr+'">✓</text><text x="32" y="92" font-size="10" fill="'+clr+'">✓</text>'
+  ],
+  '八爪章鱼':[ // multiple tentacles holding different items
+    '<circle cx="50" cy="52" r="28" '+FS+'/>',
+    '<path d="M30 44 Q30 28 40 24 Q50 20 50 28" fill="'+clr+'" opacity=".15"/><path d="M70 44 Q70 28 60 24" fill="'+clr+'" opacity=".15"/>',
+    '<circle cx="40" cy="48" r="5" fill="'+dk+'"/><circle cx="60" cy="48" r="5" fill="'+dk+'"/>',
+    '<path d="M44 62 Q50 66 56 62" fill="none" stroke="'+dk+'" stroke-width="1.8" stroke-linecap="round"/>',
+    '', '',
+    '<path d="M22 32 Q16 20 20 12" fill="none" stroke="'+clr+'" stroke-width="2.5" stroke-linecap="round"/><path d="M78 32 Q84 20 80 12" fill="none" stroke="'+clr+'" stroke-width="2.5" stroke-linecap="round"/><path d="M30 70 Q18 72 14 64" fill="none" stroke="'+clr+'" stroke-width="2.5" stroke-linecap="round"/><path d="M70 70 Q82 72 86 64" fill="none" stroke="'+clr+'" stroke-width="2.5" stroke-linecap="round"/><circle cx="20" cy="12" r="4" fill="'+clr+'" opacity=".4"/><circle cx="80" cy="12" r="4" fill="'+clr+'" opacity=".4"/><circle cx="14" cy="62" r="4" fill="'+clr+'" opacity=".4"/><circle cx="86" cy="62" r="4" fill="'+clr+'" opacity=".4"/>'
+  ],
+  '画梦人':[ // looking up, scroll in hand, starry
+    '<ellipse cx="50" cy="56" rx="24" ry="30" '+FS+'/>',
+    '<path d="M32 38 Q44 16 56 14 Q64 20 60 28" fill="'+clr+'" opacity=".3"/>',
+    '<circle cx="42" cy="46" r="4" fill="'+dk+'"/><circle cx="58" cy="46" r="4" fill="'+dk+'"/><circle cx="44" cy="44" r="1.5" fill="#fff"/><circle cx="56" cy="44" r="1.5" fill="#fff"/>',
+    '<path d="M44 64 Q50 68 56 64" fill="none" stroke="'+dk+'" stroke-width="1.5" stroke-linecap="round"/>',
+    '', '',
+    '<rect x="62" y="64" width="12" height="28" rx="2" fill="#fff" stroke="'+dk+'" stroke-width="1"/><line x1="66" y1="68" x2="66" y2="88" stroke="'+clr+'" stroke-width="1"/><circle cx="24" cy="24" r="2" fill="'+clr+'" opacity=".5"/><circle cx="68" cy="14" r="2" fill="'+clr+'" opacity=".5"/><circle cx="44" cy="18" r="1.5" fill="'+clr+'" opacity=".4"/><line x1="50" y1="8" x2="50" y2="2" stroke="'+clr+'" stroke-width="1.5" opacity=".3"/><line x1="44" y1="12" x2="40" y2="8" stroke="'+clr+'" stroke-width="1" opacity=".3"/><line x1="56" y1="12" x2="60" y2="8" stroke="'+clr+'" stroke-width="1" opacity=".3"/>'
+  ],
+  '平头哥':[ // flat head, fierce, scar
+    '<rect x="22" y="28" width="56" height="50" rx="16" '+FS+'/>',
+    '<rect x="22" y="28" width="56" height="14" rx="2" fill="'+clr+'" opacity=".3"/>',
+    '<circle cx="40" cy="50" r="5" fill="'+dk+'"/><circle cx="60" cy="50" r="5" fill="'+dk+'"/><circle cx="42" cy="48" r="2" fill="#fff"/><circle cx="58" cy="48" r="2" fill="#fff"/>',
+    '<path d="M36 64 L44 68 L52 58 L60 68 L68 62" fill="none" stroke="'+dk+'" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>',
+    '<line x1="30" y1="38" x2="46" y2="42" stroke="'+dk+'" stroke-width="3" stroke-linecap="round"/><line x1="54" y1="42" x2="70" y2="38" stroke="'+dk+'" stroke-width="3" stroke-linecap="round"/>',
+    '<line x1="24" y1="64" x2="32" y2="58" stroke="'+clr+'" stroke-width="2" stroke-linecap="round"/>'
+  ],
+  '水獭':[ // cute, holding tool, whiskers
+    '<ellipse cx="50" cy="54" rx="28" ry="30" '+FS+'/>',
+    '<circle cx="50" cy="30" r="8" fill="'+dk+'"/>',
+    '<circle cx="40" cy="48" r="4" fill="'+dk+'"/><circle cx="60" cy="48" r="4" fill="'+dk+'"/>',
+    '<path d="M46 62 Q50 64 54 62" fill="none" stroke="'+dk+'" stroke-width="1.5" stroke-linecap="round"/>',
+    '', '',
+    '<ellipse cx="50" cy="30" rx="4" ry="2" fill="'+clr+'" opacity=".5"/><line x1="30" y1="52" x2="20" y2="48" stroke="'+dk+'" stroke-width="1.5" stroke-linecap="round"/><line x1="30" y1="56" x2="20" y2="54" stroke="'+dk+'" stroke-width="1.5" stroke-linecap="round"/><line x1="70" y1="52" x2="80" y2="48" stroke="'+dk+'" stroke-width="1.5" stroke-linecap="round"/><line x1="70" y1="56" x2="80" y2="54" stroke="'+dk+'" stroke-width="1.5" stroke-linecap="round"/><rect x="70" y="36" width="10" height="18" rx="2" fill="'+clr+'" opacity=".2" stroke="'+clr+'" stroke-width="1"/>'
+  ],
+  '愚公移山':[ // old man, pickaxe, mountain
+    '<ellipse cx="50" cy="54" rx="26" ry="30" '+FS+'/>',
+    '<circle cx="50" cy="26" r="16" fill="'+dk+'" opacity=".12"/><line x1="36" y1="32" x2="34" y2="28" stroke="'+dk+'" stroke-width="1"/><line x1="64" y1="32" x2="66" y2="28" stroke="'+dk+'" stroke-width="1"/>',
+    '<circle cx="40" cy="50" r="4" fill="'+dk+'"/><circle cx="60" cy="50" r="4" fill="'+dk+'"/>',
+    '<path d="M42 64 Q50 68 58 64" fill="none" stroke="'+dk+'" stroke-width="1.8" stroke-linecap="round"/>',
+    '<line x1="34" y1="42" x2="44" y2="44" stroke="'+dk+'" stroke-width="2" stroke-linecap="round"/><line x1="56" y1="44" x2="66" y2="42" stroke="'+dk+'" stroke-width="2" stroke-linecap="round"/>',
+    '<path d="M72 54 L82 30" stroke="'+dk+'" stroke-width="2.5" stroke-linecap="round"/><rect x="78" y="24" width="8" height="8" rx="1" fill="'+clr+'" opacity=".5"/><path d="M10 70 L22 44 L34 70" fill="'+clr+'" opacity=".08" stroke="'+clr+'" stroke-width="1"/><path d="M18 70 L28 50 L38 70" fill="'+clr+'" opacity=".07"/>'
+  ],
+  '扫地僧':[ // eyes closed, slight smile, broom
+    '<circle cx="50" cy="52" r="28" '+FS+'/>',
+    '<circle cx="50" cy="52" r="28" fill="none" stroke="'+clr+'" stroke-width="2"/>',
+    '<path d="M36 46 Q40 44 44 46" fill="none" stroke="'+dk+'" stroke-width="2" stroke-linecap="round"/><path d="M56 46 Q60 44 64 46" fill="none" stroke="'+dk+'" stroke-width="2" stroke-linecap="round"/>',
+    '<path d="M44 62 Q50 66 56 62" fill="none" stroke="'+dk+'" stroke-width="1.5" stroke-linecap="round"/>',
+    '', '',
+    '<rect x="14" y="0" width="4" height="70" rx="1" fill="'+dk+'" opacity=".15"/><path d="M18 0 Q26 0 22 2" fill="'+clr+'" opacity=".2"/><line x1="22" y1="2" x2="18" y2="6" stroke="'+clr+'" stroke-width="1.5" opacity=".2"/><line x1="24" y1="1" x2="20" y2="8" stroke="'+clr+'" stroke-width="1" opacity=".15"/><circle cx="76" cy="30" r="8" fill="'+clr+'" opacity=".05"/>'
+  ],
+  '浪里白':[ // sunglasses, messy hair, big grin
+    '<circle cx="50" cy="56" r="30" '+FS+'/>',
+    '<path d="M24 46 Q26 18 50 10 Q74 18 76 46" fill="'+clr+'" opacity=".35"/><path d="M30 36 Q34 26 44 22" fill="none" stroke="'+clr+'" stroke-width="2" stroke-linecap="round"/><path d="M56 22 Q66 26 70 36" fill="none" stroke="'+clr+'" stroke-width="2" stroke-linecap="round"/>',
+    '<rect x="32" y="44" width="36" height="12" rx="4" fill="'+dk+'"/><rect x="40" y="44" width="4" height="12" fill="'+sk+'"/><circle cx="44" cy="50" r="2.5" fill="#fff" opacity=".6"/><circle cx="56" cy="50" r="2.5" fill="#fff" opacity=".6"/>',
+    '<path d="M36 66 Q50 80 64 64" fill="none" stroke="'+dk+'" stroke-width="2.2" stroke-linecap="round"/>',
+    '', '',
+    '<line x1="50" y1="12" x2="50" y2="30" stroke="'+clr+'" stroke-width="1.5" opacity=".3"/>'
+  ],
+  '卧龙':[ // eyes closed, feather fan, reclining
+    '<ellipse cx="50" cy="58" rx="24" ry="28" '+FS+'/>',
+    '<path d="M30 38 Q42 26 50 28 Q58 26 70 38" fill="'+clr+'" opacity=".2" stroke="'+clr+'" stroke-width="1.5"/>',
+    '<path d="M38 52 Q42 50 46 52" fill="none" stroke="'+dk+'" stroke-width="2" stroke-linecap="round"/><path d="M54 52 Q58 50 62 52" fill="none" stroke="'+dk+'" stroke-width="2" stroke-linecap="round"/>',
+    '<path d="M44 66 Q50 68 56 66" fill="none" stroke="'+dk+'" stroke-width="1.5" stroke-linecap="round"/>',
+    '', '',
+    '<path d="M72 30 Q90 14 86 44 Q84 44 78 36" fill="'+clr+'" opacity=".15" stroke="'+clr+'" stroke-width="1.5"/><line x1="78" y1="36" x2="84" y2="28" stroke="'+clr+'" stroke-width="1" opacity=".3"/><line x1="80" y1="38" x2="86" y2="32" stroke="'+clr+'" stroke-width="1" opacity=".3"/><line x1="76" y1="32" x2="82" y2="24" stroke="'+clr+'" stroke-width="1" opacity=".3"/>'
+  ],
+  '斥候':[ // hand shading eyes, looking into distance
+    '<ellipse cx="50" cy="54" rx="26" ry="28" '+FS+'/>',
+    '<path d="M30 36 Q36 20 50 18 Q64 20 70 36" fill="'+clr+'" opacity=".25"/>',
+    '<circle cx="40" cy="48" r="5" fill="'+dk+'"/><circle cx="60" cy="48" r="5" fill="'+dk+'"/><circle cx="42" cy="46" r="2" fill="#fff"/><circle cx="58" cy="46" r="2" fill="#fff"/>',
+    '<path d="M44 64 Q50 66 56 64" fill="none" stroke="'+dk+'" stroke-width="1.8" stroke-linecap="round"/>',
+    '', '',
+    '<rect x="62" y="20" width="22" height="6" rx="3" fill="'+clr+'" opacity=".3"/><line x1="70" y1="14" x2="70" y2="8" stroke="'+clr+'" stroke-width="1.5" opacity=".3"/><circle cx="70" cy="6" r="3" fill="'+clr+'" opacity=".2"/><circle cx="24" cy="70" r="12" fill="'+clr+'" opacity=".04"/>'
+  ],
+  'CPU':[ // gear on head, question mark, hand on chin
+    '<ellipse cx="50" cy="56" rx="26" ry="28" '+FS+'/>',
+    '<circle cx="50" cy="28" r="10" fill="none" stroke="'+clr+'" stroke-width="2.5"/><circle cx="50" cy="28" r="5" fill="'+clr+'" opacity=".3"/>',
+    '<circle cx="40" cy="48" r="5" fill="'+dk+'"/><circle cx="60" cy="48" r="5" fill="'+dk+'"/>',
+    '<ellipse cx="50" cy="66" rx="4" ry="2.5" fill="'+dk+'" opacity=".5"/>',
+    '<line x1="30" y1="40" x2="44" y2="43" stroke="'+dk+'" stroke-width="2.5" stroke-linecap="round"/><line x1="56" y1="43" x2="70" y2="40" stroke="'+dk+'" stroke-width="2.5" stroke-linecap="round"/>',
+    '<text x="66" y="34" font-size="18" font-weight="900" fill="'+clr+'" opacity=".6">?</text><circle cx="74" cy="68" r="6" fill="'+clr+'" opacity=".12"/><circle cx="74" cy="78" r="5" fill="'+clr+'" opacity=".1"/><line x1="74" y1="78" x2="74" y2="86" stroke="'+clr+'" stroke-width="1.5" opacity=".15"/>'
+  ],
+  '愣头青':[ // bandage, charging forward, wide grin
+    '<ellipse cx="50" cy="54" rx="28" ry="30" '+FS+'/>',
+    '<path d="M30 36 Q36 16 50 14 Q64 16 70 36" fill="'+dk+'" opacity=".15"/>',
+    '<circle cx="40" cy="48" r="6" fill="'+dk+'"/><circle cx="60" cy="48" r="6" fill="'+dk+'"/><circle cx="42" cy="46" r="2.5" fill="#fff"/><circle cx="58" cy="46" r="2.5" fill="#fff"/>',
+    '<path d="M34 64 Q50 80 66 62" fill="none" stroke="'+dk+'" stroke-width="2.2" stroke-linecap="round"/>',
+    '<line x1="30" y1="36" x2="46" y2="38" stroke="'+dk+'" stroke-width="3" stroke-linecap="round"/><line x1="54" y1="38" x2="70" y2="36" stroke="'+dk+'" stroke-width="3" stroke-linecap="round"/>',
+    '<line x1="26" y1="28" x2="34" y2="24" stroke="#f5f5f5" stroke-width="3"/><line x1="28" y1="32" x2="36" y2="28" stroke="#fff" stroke-width="2" opacity=".8"/><line x1="36" y1="72" x2="44" y2="66" stroke="'+clr+'" stroke-width="1.5" stroke-linecap="round"/>'
+  ],
+  '老司机':[ // steering wheel, knowing smile
+    '<circle cx="50" cy="52" r="26" '+FS+'/>',
+    '<path d="M30 34 Q42 22 50 24 Q58 22 70 34" fill="'+dk+'" opacity=".15"/>',
+    '<circle cx="40" cy="48" r="4" fill="'+dk+'"/><circle cx="60" cy="48" r="4" fill="'+dk+'"/><circle cx="42" cy="46" r="1.5" fill="#fff"/><circle cx="58" cy="46" r="1.5" fill="#fff"/>',
+    '<path d="M44 60 Q50 64 56 60" fill="none" stroke="'+dk+'" stroke-width="1.8" stroke-linecap="round"/>',
+    '', '',
+    '<ellipse cx="66" cy="60" rx="20" ry="12" fill="none" stroke="'+clr+'" stroke-width="2.5"/><circle cx="66" cy="60" r="6" fill="'+clr+'" opacity=".15"/><line x1="66" y1="48" x2="66" y2="44" stroke="'+clr+'" stroke-width="2.5"/><line x1="66" y1="72" x2="66" y2="76" stroke="'+clr+'" stroke-width="2.5"/><line x1="54" y1="60" x2="50" y2="60" stroke="'+clr+'" stroke-width="2.5"/><line x1="78" y1="60" x2="82" y2="60" stroke="'+clr+'" stroke-width="2.5"/>'
+  ],
+  '搬砖王':[ // dark circles, brick, coffee cup
+    '<circle cx="50" cy="52" r="26" '+FS+'/>',
+    '<path d="M30 36 Q36 20 50 18 Q64 20 70 36" fill="'+dk+'" opacity=".12"/>',
+    '<ellipse cx="40" cy="48" rx="5" ry="6" fill="'+dk+'"/><ellipse cx="60" cy="48" rx="5" ry="6" fill="'+dk+'"/><circle cx="42" cy="50" r="2" fill="#fff" opacity=".5"/><circle cx="58" cy="50" r="2" fill="#fff" opacity=".5"/>',
+    '<path d="M44 62 Q50 64 56 62" fill="none" stroke="'+dk+'" stroke-width="1.5" stroke-linecap="round"/>',
+    '', '',
+    '<ellipse cx="40" cy="42" rx="7" ry="4" fill="'+dk+'" opacity=".08"/><ellipse cx="60" cy="42" rx="7" ry="4" fill="'+dk+'" opacity=".08"/><rect x="64" y="64" width="16" height="24" rx="2" fill="'+clr+'" opacity=".2" stroke="'+clr+'" stroke-width="1"/><line x1="68" y1="70" x2="76" y2="70" stroke="'+clr+'" stroke-width=".8"/><line x1="68" y1="76" x2="74" y2="76" stroke="'+clr+'" stroke-width=".8"/><line x1="68" y1="82" x2="76" y2="82" stroke="'+clr+'" stroke-width=".8"/><rect x="18" y="64" width="12" height="10" rx="3" fill="#fff" stroke="'+dk+'" stroke-width="1"/><path d="M22 64 Q22 60 24 60 Q26 60 26 64" fill="none" stroke="'+dk+'" stroke-width="1"/>'
+  ]
+  };
+
+  const el = C[char] || C['暗中观察'];
+  return '<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">'+bg+body+el.join('')+'</svg>';
+}
+function getRelated(code) {
+  const parts = code.split('-');
+  const allCodes = Object.keys(TYPES);
+  const related = allCodes.filter(c => {
+    if (c === code) return false;
+    const cp = c.split('-');
+    let diffs = 0;
+    for (let i = 0; i < 4; i++) if (cp[i] !== parts[i]) diffs++;
+    return diffs === 1;
+  });
+  // shuffle and take 3
+  for (let i = related.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [related[i], related[j]] = [related[j], related[i]];
+  }
+  return related.slice(0, 3);
+}
+
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+let answers = {};
+let shuffled = [];
+let currentQIdx = 0;
+let currentCode = null;
+let lastRenderedQIdx = -1;
+let slideDir = 'right';
+let resumeTest = false;
+let autoAdvTimer = null;
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function initTest() {
+  shuffled = shuffle(QUESTIONS);
+  answers = {};
+  shuffled.forEach(q => answers[q.id] = -1);
+  currentQIdx = 0;
+  lastRenderedQIdx = -1;
+  slideDir = 'right';
+}
+
+function getScore(dimIdx) {
+  let s = 0;
+  shuffled.forEach(q => {
+    if (q.dim !== dimIdx) return;
+    const a = answers[q.id];
+    if (a === 0) s += 1;
+    else if (a === 2) s -= 1;
+  });
+  return s;
+}
+
+function getCode() {
+  const parts = CODE_ORDER.map(d => {
+    const s = getScore(d);
+    const di = DIMS[d];
+    return s > 0 ? di.left : s < 0 ? di.right : (Math.random() < 0.5 ? di.left : di.right);
+  });
+  return parts.join('-');
+}
+
+// Derive scores from code when no test data (for direct URL visits)
+function getScoresFromCode(code) {
+  const parts = code.split('-');
+  const dimOrder = [0, 3, 1, 2];
+  const scores = [0, 0, 0, 0];
+  dimOrder.forEach((d, i) => {
+    const di = DIMS[d];
+    const letter = parts[i];
+    scores[d] = letter === di.left ? 6 : -6;
+  });
+  return scores;
+}
+
+function hasTestData() {
+  return shuffled.length > 0 && Object.values(answers).some(v => v >= 0);
+}
+
+// helpers for canvas share card
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.arcTo(x + w, y, x + w, y + r, r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+  ctx.lineTo(x + r, y + h);
+  ctx.arcTo(x, y + h, x, y + h - r, r);
+  ctx.lineTo(x, y + r);
+  ctx.arcTo(x, y, x + r, y, r);
+  ctx.closePath();
+}
+
+function wrapText(ctx, text, x, y, maxW, lh) {
+  const chars = text.split('');
+  let line = '', py = y;
+  for (let i = 0; i < chars.length; i++) {
+    const test = line + chars[i];
+    if (ctx.measureText(test).width > maxW) {
+      ctx.fillText(line, x, py);
+      line = chars[i];
+      py += lh;
+    } else {
+      line = test;
+    }
+  }
+  if (line) ctx.fillText(line, x, py);
+}
+
+function drawFace(ctx, color, cx, cy, r, char) {
+  const dk = '#1a1a1a';
+  // outer ring
+  ctx.fillStyle = color; ctx.globalAlpha = .06;
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.fill();
+  ctx.globalAlpha = 1;
+  // face
+  ctx.fillStyle = '#fbf7f2'; ctx.strokeStyle = color; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.arc(cx, cy-4, r*.55, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+
+  // eyes — vary by character
+  const ex = r*.22, ey = cy-12;
+  ctx.fillStyle = dk;
+  if (char==='暗中观察') {
+    ctx.beginPath(); ctx.arc(cx-ex, ey-2, r*.18, 0, Math.PI); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx+ex, ey-2, r*.18, 0, Math.PI); ctx.stroke();
+    ctx.fillStyle = color; ctx.beginPath(); ctx.arc(cx-ex, ey+2, r*.1, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx+ex, ey+2, r*.1, 0, Math.PI*2); ctx.fill();
+  } else {
+    ctx.beginPath(); ctx.arc(cx-ex, ey, r*.08, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx+ex, ey, r*.08, 0, Math.PI*2); ctx.fill();
+  }
+
+  // mouth
+  ctx.strokeStyle = dk; ctx.lineWidth = 2; ctx.lineCap = 'round';
+  const my = cy+r*.14;
+  if (char==='平头哥'||char==='浪里白'||char==='愣头青')
+    ctx.stroke(new Path2D('M'+(cx-r*.12)+' '+(my-2)+' L'+(cx-r*.04)+' '+my+' L'+cx+' '+(my-4)+' L'+(cx+r*.04)+' '+my+' L'+(cx+r*.12)+' '+(my-2)));
+  else if (char==='扫地僧'||char==='卧龙'||char==='搬砖王')
+    ctx.stroke(new Path2D('M'+(cx-r*.06)+' '+my+' Q'+cx+' '+(my+r*.04)+' '+(cx+r*.06)+' '+my));
+  else
+    ctx.stroke(new Path2D('M'+(cx-r*.06)+' '+my+' Q'+cx+' '+(my+r*.08)+' '+(cx+r*.06)+' '+my+''));
+
+  ctx.globalAlpha = 1;
+}
+
+// ═══════════════════════════════════════════
+// CANVAS SHARE CARD
+// ═══════════════════════════════════════════
+function generateShareImage(code) {
+  const t = TYPES[code];
+  const color = TYPE_COLORS[code];
+  const dimOrder = [0, 3, 1, 2];
+  const parts = code.split('-');
+  const scores = hasTestData() ? dimOrder.map(d => getScore(d)) : getScoresFromCode(code);
+
+  const dpr = window.devicePixelRatio || 1;
+  const W = 600, H = 800;
+  const canvas = document.createElement('canvas');
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  // bg — match page style
+  ctx.fillStyle = '#f8f4ee';
+  ctx.fillRect(0, 0, W, H);
+
+  // top accent bar
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, W, 4);
+
+  // brand
+  ctx.fillStyle = '#999';
+  ctx.font = '12px -apple-system, "PingFang SC", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('FIND · 财务人 16 型人格', W/2, 40);
+
+  // character avatar face
+  drawFace(ctx, color, W/2, 96, 80, t.character);
+
+  // type code — below avatar
+  ctx.font = '900 42px -apple-system, "PingFang SC", sans-serif';
+  const step = 40, tw = parts.length * step, sx = (W - tw) / 2 + step / 2;
+  parts.forEach((l, i) => {
+    ctx.fillStyle = color;
+    ctx.fillText(l, sx + i * step, 170);
+  });
+
+  // separator dots
+  ctx.fillStyle = 'rgba(0,0,0,.1)';
+  for (let i = 0; i < parts.length - 1; i++) {
+    ctx.beginPath();
+    ctx.arc(sx + i * step + step / 2, 162, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // type name + tagline
+  ctx.fillStyle = '#1a1a1a';
+  ctx.font = 'bold 22px -apple-system, "PingFang SC", sans-serif';
+  ctx.fillText(t.name, W/2, 208);
+  ctx.fillStyle = '#888';
+  ctx.font = 'italic 14px -apple-system, "PingFang SC", sans-serif';
+  ctx.fillText('「' + t.tagline + '」', W/2, 234);
+
+  // desc card
+  ctx.fillStyle = '#fff';
+  roundRect(ctx, 36, 256, W - 72, 100, 14);
+  ctx.fill();
+  ctx.fillStyle = '#666';
+  ctx.font = '14px -apple-system, "PingFang SC", sans-serif';
+  ctx.textAlign = 'center';
+  wrapText(ctx, t.desc, W/2, 282, W - 100, 23);
+
+  // dimensions
+  const dimY = 384;
+  dimOrder.forEach((d, idx) => {
+    const di = DIMS[d];
+    const letter = parts[idx];
+    const isLeft = letter === di.left;
+    const sc = scores[idx];
+    const pct = Math.round((8 - Math.max(-8, Math.min(8, sc))) / 16 * 100);
+    const y = dimY + idx * 68;
+
+    ctx.fillStyle = '#bbb';
+    ctx.font = '11px -apple-system, "PingFang SC", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(di.label, W/2, y);
+
+    ctx.fillStyle = isLeft ? color : '#bbb';
+    ctx.font = 'bold 12px -apple-system, "PingFang SC", sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(`${di.left} ${di.ln}`, 110, y + 24);
+
+    ctx.fillStyle = isLeft ? '#bbb' : color;
+    ctx.textAlign = 'left';
+    ctx.fillText(`${di.rn} ${di.right}`, W - 110, y + 24);
+
+    ctx.fillStyle = '#e8e2d8';
+    roundRect(ctx, 130, y + 16, W - 260, 4, 2);
+    ctx.fill();
+
+    ctx.fillStyle = color;
+    roundRect(ctx, 130, y + 16, (W - 260) * pct / 100, 4, 2);
+    ctx.fill();
+  });
+
+  // footer
+  ctx.fillStyle = '#bbb';
+  ctx.font = '12px -apple-system, "PingFang SC", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('搜索「财务人 16 型人格」即可测试', W/2, H - 30);
+
+  // bottom accent bar
+  ctx.fillStyle = color;
+  ctx.fillRect(0, H - 4, W, 4);
+
+  return canvas.toDataURL('image/png');
+}
+
+// ═══════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+// ═══════════════════════════════════════════
+// ROUTER
+// ═══════════════════════════════════════════
+function navigate(hash) {
+  location.hash = hash;
+}
+
+function route() {
+  const hash = location.hash.slice(1) || '/';
+  window.scrollTo(0, 0);
+
+  if (hash === '/' || hash === '') renderLanding();
+  else if (hash === '/test') renderTest();
+  else if (hash.startsWith('/result/')) {
+    currentCode = hash.split('/')[2];
+    renderResult(currentCode);
+  }
+  else if (hash === '/types') renderTypeGallery();
+  else if (hash.startsWith('/types/')) {
+    currentCode = hash.split('/')[2];
+    renderTypeDetail(currentCode);
+  }
+  else renderLanding();
+}
+
+window.onhashchange = route;
+
+// ═══════════════════════════════════════════
+// PAGES
+// ═══════════════════════════════════════════
+
+function renderLanding() {
+  document.getElementById('app').innerHTML = `
+    <div class="landing">
+      <div class="hero-glow"></div>
+      <div class="logo">FIND</div>
+      <div class="sub">Finance INdividual Diagnostic</div>
+      <div class="tagline">财务人的<br>16型人格测试</div>
+      <div class="desc">32道题 · 约5分钟 · 看看自己是哪一种</div>
+      <div class="info-capsule"><span>5 分钟</span><span class="info-sep"></span><span>32 题</span><span class="info-sep"></span><span>不上传数据</span></div>
+      <button class="btn btn-accent block" onclick="navigate('/test')">开始测试</button>
+      <div style="margin-top:20px">
+        <a class="gallery-link" onclick="navigate('/types')">查看 16 型人格图鉴 →</a>
+      </div>
+      <div class="disclaimer">FIND · 财务人的16型人格 · 仅供娱乐</div>
+    </div>`;
+}
+
+function renderTest() {
+  if (!resumeTest) initTest();
+  resumeTest = false;
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const total = shuffled.length;
+  const idx = currentQIdx;
+  const q = shuffled[idx];
+  const done = Object.values(answers).filter(v => v >= 0).length;
+  const pct = Math.round((idx + 1) / total * 100);
+  const ans = answers[q.id];
+  const isNew = idx !== lastRenderedQIdx;
+  const enterClass = isNew ? `enter-${slideDir}` : '';
+  lastRenderedQIdx = idx;
+
+  let html = '';
+  html += `<button class="nav-back" onclick="clearTimeout(autoAdvTimer);navigate('/')">← 返回首页</button>`;
+  html += `<div class="progress-wrap">`;
+  html += `<div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>`;
+  html += `<div class="progress-info"><span>第 ${idx+1}/${total} 题</span><span>${done} 题已答</span></div>`;
+  html += `</div>`;
+
+  html += `<div class="q-wrap"><div class="q-card ${enterClass}" id="qcard">`;
+  html += `<div class="q-num">Q${idx+1} · ${DIMS[q.dim].label}</div>`;
+  html += `<div class="q-statement">${q.q}</div>`;
+  html += `<div class="q-options">`;
+  const opts = [{label:'A',text:q.a},{label:'B',text:q.b},{label:'C',text:q.c}];
+  opts.forEach((o, oi) => {
+    const picked = ans === oi ? ' picked' : '';
+    html += `<button class="q-opt${picked}" onclick="pickAnswer(${q.id},${oi})">${o.label}. ${o.text}</button>`;
+  });
+  html += `</div></div></div>`;
+
+  html += `<div class="q-nav">`;
+  if (idx > 0) html += `<button class="btn outline" onclick="prevQ()">← 上一题</button>`;
+  if (idx < total - 1) {
+    html += `<button class="btn" onclick="nextQ()" ${ans < 0 ? 'disabled style="opacity:.4;pointer-events:none"' : ''}>下一题 →</button>`;
+  } else {
+    html += `<button class="btn" onclick="finishTest()" ${done < total ? 'disabled style="opacity:.4;pointer-events:none"' : ''}>查看结果</button>`;
+  }
+  html += `</div>`;
+
+  document.getElementById('app').innerHTML = html;
+}
+
+function pickAnswer(qid, val) {
+  answers[qid] = val;
+  renderQuestion();
+  clearTimeout(autoAdvTimer);
+  if (currentQIdx < shuffled.length - 1) {
+    autoAdvTimer = setTimeout(() => {
+      currentQIdx++;
+      slideDir = 'right';
+      renderQuestion();
+      window.scrollTo(0, 0);
+    }, 400);
+  }
+}
+
+function prevQ() {
+  if (currentQIdx > 0) { clearTimeout(autoAdvTimer); currentQIdx--; slideDir = 'left'; renderQuestion(); window.scrollTo(0, 0); }
+}
+
+function nextQ() {
+  if (currentQIdx < shuffled.length - 1) { clearTimeout(autoAdvTimer); currentQIdx++; slideDir = 'right'; renderQuestion(); window.scrollTo(0, 0); }
+}
+
+function finishTest() {
+  const code = getCode();
+  navigate('/result/' + code);
+}
+
+// ═══════════════════════════════════════════
+// RESULT PAGE
+// ═══════════════════════════════════════════
+function renderResultDimensions(scores) {
+  const order = [0, 3, 1, 2];
+  let h = '';
+  order.forEach(d => {
+    const sc = scores[d];
+    const di = DIM_INSIGHTS[d];
+    const isLeft = sc >= 0;
+    const side = isLeft ? di.left : di.right;
+    const other = isLeft ? di.right : di.left;
+    const pct = Math.round((8 - Math.max(-8, Math.min(8, sc))) / 16 * 100);
+
+    h += '<div class="dim-card">';
+    h += '<div class="dim-card-header">';
+    h += `<span class="dim-card-label">${di.label}</span>`;
+    h += `<span class="dim-card-letter">${side.code}</span>`;
+    h += '</div>';
+    h += '<div class="dim-track">';
+    h += `<div class="dim-fill" style="width:${pct}%"></div>`;
+    h += `<div class="dim-dot" style="left:${pct}%"></div>`;
+    h += '</div>';
+    h += '<div class="dim-labels">';
+    h += `<span class="l-active">${side.code} ${side.name}</span>`;
+    h += `<span>${other.code} ${other.name}</span>`;
+    h += '</div>';
+    h += `<div class="dim-insight">${side.insight}</div>`;
+    h += '</div>';
+  });
+  return h;
+}
+
+function renderResult(code) {
+  const t = TYPES[code];
+  if (!t) { renderLanding(); return; }
+  const dimOrder = [0, 3, 1, 2];
+  const scores = hasTestData() ? dimOrder.map(d => getScore(d)) : getScoresFromCode(code);
+  const parts = code.split('-');
+
+  const related = getRelated(code);
+  let relHTML = '';
+  related.forEach(r => {
+    const rt = TYPES[r];
+    relHTML += `<a class="related-item" onclick="showTypeModal('${r}')"><div class="r-code">${r}</div><div class="r-name">${rt.name}</div></a>`;
+  });
+
+  document.getElementById('app').innerHTML = `
+    <button class="nav-back" onclick="resumeTest=true;navigate('/test')">← 返回修改</button>
+    <div class="card">
+      <div class="result-top">
+        <div class="result-avatar">${avatarSVG(code)}</div>
+        <div class="result-char">${t.character}</div>
+        <div class="result-code" style="color:${TYPE_COLORS[code]}">${code}</div>
+        <div class="result-name">${t.name}</div>
+        <div class="result-tagline">「${t.tagline}」</div>
+      </div>
+      <div class="result-desc">${t.desc}</div>
+      <hr class="result-divider">
+      <div class="result-section-title">— 维度画像 —</div>
+      <div class="result-spectra">${renderResultDimensions(scores)}</div>
+      <div class="share-actions">
+        <button class="btn btn-accent block" onclick="shareResult('${code}')">分享结果</button>
+        <button class="btn outline block" onclick="resumeTest=false;navigate('/test')">重新测试</button>
+      </div>
+      ${related.length ? `<div class="related"><div class="related-title">你也可能是</div><div class="related-list">${relHTML}</div></div>` : ''}
+    </div>
+    <div class="disclaimer">FIND · 财务人的16型人格 · 仅供娱乐</div>`;
+}
+
+function shareResult(code) {
+  try {
+    const dataUrl = generateShareImage(code);
+    // show in modal
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.innerHTML = `<div class="modal-content">
+      <img src="${dataUrl}" alt="share card">
+      <p style="font-size:13px;color:#888;margin-bottom:8px">长按图片保存，分享给朋友</p>
+      <button class="btn sm outline modal-close" onclick="this.closest('.modal-overlay').remove()">关闭</button>
+    </div>`;
+    overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+    document.body.appendChild(overlay);
+  } catch(e) {
+    const t = TYPES[code];
+    const text = `FIND · 财务人16型人格\n${code} ${t.name}\n${t.desc}`;
+    if (navigator.share) {
+      navigator.share({ title:'FIND · 财务人的16型人格', text });
+    } else {
+      navigator.clipboard.writeText(text).then(() => toast('已复制，去分享吧！'));
+    }
+  }
+}
+
+// ═══════════════════════════════════════════
+// TYPE GALLERY
+// ═══════════════════════════════════════════
+function renderTypeGallery() {
+  const all = Object.entries(TYPES);
+  let gridHTML = '';
+  all.forEach(([code, t]) => {
+    gridHTML += `<a class="type-cell" style="--tc:${TYPE_COLORS[code]}" onclick="navigate('/types/${code}')"><div class="t-code">${code}</div><div class="t-avatar">${avatarSVG(code)}</div><div class="t-char" style="color:${TYPE_COLORS[code]}">${t.character}</div><div class="t-name">${t.name}</div></a>`;
+  });
+
+  document.getElementById('app').innerHTML = `
+    <button class="nav-back" onclick="navigate('/')">← 返回首页</button>
+    <div class="types-header"><h1>16 型人格图鉴</h1><p>点击查看详情</p></div>
+    <div class="types-grid">${gridHTML}</div>
+    <div class="footer">FIND · 财务人的16型人格 · 仅供娱乐</div>`;
+}
+
+// ═══════════════════════════════════════════
+// TYPE DETAIL
+// ═══════════════════════════════════════════
+function renderTypeDetail(code) {
+  const t = TYPES[code];
+  if (!t) { renderTypeGallery(); return; }
+  const dimOrder = [0, 3, 1, 2];
+  const parts = code.split('-');
+  // For detail page, each dim uses the letter from the code to position the dot
+  // Left letter = dot at 3/16, Right letter = dot at 13/16
+  const related = getRelated(code);
+  let relHTML = '';
+  related.forEach(r => {
+    const rt = TYPES[r];
+    relHTML += `<a class="related-item" onclick="showTypeModal('${r}')"><div class="r-code">${r}</div><div class="r-name">${rt.name}</div></a>`;
+  });
+
+  let dimsHTML = '';
+  dimOrder.forEach((d, i) => {
+    const di = DIMS[d];
+    const letter = parts[i];
+    const isLeft = letter === di.left;
+    const pos = isLeft ? 3 : 13;
+    dimsHTML += `<div class="dim-row">
+      <span class="d-code" style="color:${DIM_COLORS[letter]}">${letter}</span><span class="d-label">${di.label}</span>
+      <div class="d-track"><div class="d-line"></div><div class="d-dot" style="position:absolute;left:${(pos/16*100).toFixed(0)}%;transform:translateX(-50%);z-index:1;background:${DIM_COLORS[letter]}"></div></div>
+    </div>`;
+  });
+
+  document.getElementById('app').innerHTML = `
+    <button class="nav-back" onclick="navigate('/types')">← 返回图鉴</button>
+    <div class="card">
+      <div class="result-top">
+        <div class="result-avatar">${avatarSVG(code)}</div>
+        <div class="result-char">${t.character}</div>
+        <div class="result-code" style="color:${TYPE_COLORS[code]}">${code}</div>
+        <div class="result-name">${t.name}</div>
+        <div class="result-tagline">「${t.tagline}」</div>
+      </div>
+      <div class="result-desc">${t.desc}</div>
+      <hr class="result-divider">
+      <div class="detail-dims"><div class="result-section-title">— 维度画像 —</div>${dimsHTML}</div>
+      <div style="margin-top:20px">
+        <button class="btn btn-accent block" onclick="navigate('/test')">开始测试 →</button>
+      </div>
+      ${related.length ? `<div class="related"><div class="related-title">你也可能是</div><div class="related-list">${relHTML}</div></div>` : ''}
+    </div>
+    <div class="disclaimer">FIND · 财务人的16型人格 · 仅供娱乐</div>`;
+}
+
+function showTypeModal(code) {
+  const t = TYPES[code];
+  if (!t) return;
+  const parts = code.split('-');
+  let dimsHTML = '';
+  [0, 3, 1, 2].forEach((d, i) => {
+    const di = DIMS[d];
+    const letter = parts[i];
+    const isLeft = letter === di.left;
+    const pos = isLeft ? 3 : 13;
+    dimsHTML += '<div class="dim-row">';
+    dimsHTML += `<span class="d-code" style="color:${DIM_COLORS[letter]}">${letter}</span>`;
+    dimsHTML += `<span class="d-label">${di.label}</span>`;
+    dimsHTML += `<div class="d-track"><div class="d-line"></div><div class="d-dot" style="position:absolute;left:${(pos/16*100).toFixed(0)}%;transform:translateX(-50%);z-index:1;background:${DIM_COLORS[letter]}"></div></div>`;
+    dimsHTML += '</div>';
+  });
+  const overlay = document.createElement('div');
+  overlay.className = 'tmodal';
+  overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+  overlay.innerHTML = `<div class="tmodal-card">
+    <button class="tmodal-close" onclick="this.closest('.tmodal').remove()">×</button>
+    <div class="result-top">
+      <div class="result-avatar">${avatarSVG(code)}</div>
+      <div class="result-char">${t.character}</div>
+      <div class="result-code" style="color:${TYPE_COLORS[code]}">${code}</div>
+      <div class="result-name">${t.name}</div>
+      <div class="result-tagline">「${t.tagline}」</div>
+    </div>
+    <div class="result-desc">${t.desc}</div>
+    <hr class="result-divider">
+    <div class="result-section-title">— 维度画像 —</div>
+    ${dimsHTML}
+  </div>`;
+  document.body.appendChild(overlay);
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+route();
+</script>
+</body>
+</html>
