@@ -11,7 +11,10 @@
 *,::before,::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:16px}
 body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:linear-gradient(180deg,#f8f4ee 0%,#ede5d8 100%);background-attachment:fixed;color:#1a1a1a;line-height:1.6;min-height:100dvh;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
-.container{max-width:480px;margin:0 auto;padding:20px 20px 60px;padding:20px 20px calc(60px + env(safe-area-inset-bottom, 0px));min-height:100dvh;overscroll-behavior:contain}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(184,149,106,.05) 1px,transparent 1px);background-size:20px 20px;pointer-events:none;z-index:0}
+.container{max-width:480px;margin:0 auto;padding:20px 20px 60px;padding:20px 20px calc(60px + env(safe-area-inset-bottom, 0px));min-height:100dvh;overscroll-behavior:contain;position:relative;z-index:1}
+#app{transition:opacity .18s ease}
+#app.fade-out{opacity:0}
 
 .btn{display:inline-block;padding:15px 40px;border-radius:30px;border:none;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s cubic-bezier(.25,.8,.25,1.2);background:#1a1a1a;color:#fff;letter-spacing:.5px}
 .btn:active{transform:scale(.96);opacity:.85}
@@ -22,12 +25,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .btn.sm{padding:10px 20px;font-size:13px}
 
 /* landing */
-.landing{text-align:center;padding-top:60px;position:relative}
-.hero-glow{position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(184,149,106,.14) 0%,transparent 65%);pointer-events:none;z-index:-1}
-.landing .logo{font-size:44px;letter-spacing:6px;font-weight:900;color:#1a1a1a;margin-bottom:4px}
-.landing .sub{font-size:13px;color:#999;margin-bottom:32px}
-.landing .tagline{font-size:22px;font-weight:700;line-height:1.5;margin-bottom:8px}
-.landing .desc{font-size:14px;color:#666;margin-bottom:40px}
+.landing{text-align:center;padding-top:80px;position:relative}
+.hero-glow{position:absolute;top:-120px;left:50%;transform:translateX(-50%);width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(184,149,106,.16) 0%,transparent 60%);pointer-events:none;z-index:-1}
+.landing .logo{font-size:64px;letter-spacing:10px;font-weight:900;color:#1a1a1a;margin-bottom:2px}
+.landing .sub{font-size:12px;color:#bbb;margin-bottom:36px;letter-spacing:2px}
+.landing .tagline{font-size:26px;font-weight:700;line-height:1.4;margin-bottom:6px}
+.landing .desc{font-size:15px;color:#888;margin-bottom:32px}
 .landing .info-row{display:flex;justify-content:center;gap:28px;margin-bottom:36px;font-size:13px;color:#aaa}
 .landing .info-capsule{display:inline-flex;align-items:center;background:#fff;border-radius:20px;padding:8px 18px;font-size:13px;color:#999;margin-bottom:36px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
 .info-capsule .info-sep{width:1px;height:12px;background:#d5cdc0;margin:0 12px}
@@ -65,22 +68,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .q-nav button{flex:1}
 
 /* result */
-.result-top{text-align:center;padding:56px 0 20px}
-.result-avatar{width:180px;height:180px;margin:-36px auto 0}
+.result-top{text-align:center;padding:20px 0 16px}
+.result-avatar{width:120px;height:120px;margin:8px auto 4px}
 .result-avatar svg{width:100%;height:100%;display:block}
-.result-char{font-size:15px;font-weight:700;color:#b8956a;margin:6px 0 4px;letter-spacing:1px}
-.result-code{font-size:36px;font-weight:900;letter-spacing:5px;margin-bottom:2px}
-.result-name{font-size:17px;font-weight:600;color:#999;margin-bottom:0}
+.result-char{font-size:15px;font-weight:700;color:#b8956a;margin:2px 0 2px;letter-spacing:1px}
+.result-code{font-size:48px;font-weight:900;letter-spacing:8px;margin-bottom:0}
+.result-name{font-size:16px;font-weight:600;color:#999;margin-bottom:4px}
 .result-desc{font-size:15px;line-height:1.9;color:#555}
 .result-spectra{margin:24px 0}
 .share-actions{display:flex;flex-direction:column;gap:10px;margin-top:24px}
+.result-card{padding:28px 24px;margin-bottom:16px}
+.result-divider{width:40px;height:1px;background:#d5cdc0;margin:28px auto;border:none}
 
 /* type gallery */
 .types-header{text-align:center;padding:20px 0}
 .types-header h1{font-size:22px;margin-bottom:4px}
 .types-header p{font-size:14px;color:#888}
 .types-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.type-cell{background:#fff;border-radius:14px;padding:20px 16px;text-align:center;box-shadow:0 1px 2px rgba(0,0,0,.03);cursor:pointer;transition:all .15s;text-decoration:none;color:inherit;display:block;position:relative;overflow:hidden}
+.type-cell{background:#fff;border-radius:14px;padding:20px 16px;text-align:center;box-shadow:0 1px 2px rgba(0,0,0,.03);cursor:pointer;transition:all .15s;text-decoration:none;color:inherit;display:block;position:relative;overflow:hidden;border-top:3px solid var(--tc,#e8e2d8)}
 .type-cell::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 130%,var(--tc,#f0ebe0) 0%,transparent 70%);opacity:.1;z-index:0;transition:opacity .2s}
 .type-cell:active{transform:scale(.97)}
 .type-cell:active::before{opacity:.2}
@@ -123,13 +128,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .tmodal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:24px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 .tmodal-card{background:#fff;border-radius:16px;padding:24px;max-width:400px;width:100%;max-height:80vh;overflow-y:auto;position:relative;box-shadow:0 8px 32px rgba(0,0,0,.12);animation:tmodalIn .2s ease-out}
 @keyframes tmodalIn{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes tmodalOut{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.96)}}
+.tmodal.close{animation:tmodalOut .12s ease-in forwards}
+.tmodal.close .tmodal-card{animation:tmodalOut .12s ease-in forwards}
 .tmodal-close{position:absolute;top:12px;right:14px;width:32px;height:32px;border-radius:50%;border:none;background:rgba(0,0,0,.05);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#999;transition:all .15s;line-height:1}
 .tmodal-close:hover{background:rgba(0,0,0,.1);color:#333}
 .tmodal-card .result-code{font-size:40px}
-.tmodal-card .result-avatar{width:120px;height:120px;margin:-24px auto 0}
+.tmodal-card .result-avatar{width:100px;height:100px;margin:4px auto}
 .tmodal-card .result-char{font-size:13px}
 .tmodal-card .result-tagline{font-size:14px}
-.tmodal-card .result-code{font-size:32px}
+.tmodal-card .result-code{font-size:38px;letter-spacing:6px}
 .tmodal-card .result-desc{font-size:14px}
 
 /* footer */
@@ -147,7 +155,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .result-divider{width:40px;height:1px;background:#d5cdc0;margin:28px auto;border:none}
 .result-section-title{font-size:11px;color:#aaa;text-align:center;margin:32px 0 16px;letter-spacing:4px;text-transform:uppercase}
 .result-tagline{font-size:15px;color:#666;text-align:center;margin:8px 0 24px;line-height:1.8;font-style:italic}
-.dim-card{background:#faf7f2;border-radius:12px;padding:18px 20px;margin-bottom:12px;border-left:3px solid #b8956a}
+.dim-card{background:#fff;border-radius:12px;padding:18px 20px;margin-bottom:12px;border-left:3px solid #b8956a;box-shadow:0 1px 2px rgba(0,0,0,.03)}
 .dim-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .dim-card-label{font-size:13px;font-weight:600;color:#1a1a1a}
 .dim-card-letter{font-size:22px;font-weight:900;letter-spacing:1px;color:#b8956a}
@@ -156,7 +164,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","H
 .dim-dot{position:absolute;top:50%;width:14px;height:14px;background:#b8956a;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 4px rgba(184,149,106,.12);z-index:2}
 .dim-labels{display:flex;justify-content:space-between;font-size:12px;color:#bbb;margin-bottom:10px}
 .dim-labels .l-active{color:#1a1a1a;font-weight:700}
-.dim-insight{font-size:13px;color:#666;line-height:1.6;background:#fff;border-radius:8px;padding:10px 12px}
+.dim-insight{font-size:13px;color:#666;line-height:1.6;background:#f8f5f0;border-radius:8px;padding:10px 12px}
 
 @media(max-width:380px){
   .q-statement{font-size:16px}
@@ -673,12 +681,14 @@ function toast(msg) {
 // ROUTER
 // ═══════════════════════════════════════════
 function navigate(hash) {
-  location.hash = hash;
+  document.getElementById('app').classList.add('fade-out');
+  setTimeout(() => { location.hash = hash; }, 120);
 }
 
 function route() {
   const hash = location.hash.slice(1) || '/';
   window.scrollTo(0, 0);
+  const app = document.getElementById('app');
 
   if (hash === '/' || hash === '') renderLanding();
   else if (hash === '/about') renderAbout();
@@ -693,6 +703,8 @@ function route() {
     renderTypeDetail(currentCode);
   }
   else renderLanding();
+
+  setTimeout(() => { app.classList.remove('fade-out'); }, 40);
 }
 
 window.onhashchange = route;
@@ -725,7 +737,7 @@ function renderAbout() {
   const DC = DIM_COLORS;
   document.getElementById('app').innerHTML = `
     <button class="nav-back" onclick="navigate('/')">← 返回首页</button>
-    <div class="card">
+    <div class="result-card">
       <div style="text-align:center;padding:20px 0 12px">
         <div style="font-size:36px;font-weight:900;letter-spacing:6px;margin-bottom:2px;">FIND</div>
         <div style="font-size:12px;color:#bbb;">Finance INdividual Diagnostic</div>
@@ -736,6 +748,26 @@ function renderAbout() {
         <div style="font-size:12px;color:#999;margin-bottom:4px">四个维度各取一极，组合成类型代码</div>
         <div style="font-size:28px;font-weight:900;letter-spacing:4px">2 × 2 × 2 × 2 = 16</div>
         <div style="font-size:12px;color:#888;margin-top:4px">L/C · D/B · R/S · T/E</div>
+      </div>
+      <div style="text-align:center;margin:24px 0 28px">
+        <svg viewBox="0 0 260 260" style="width:220px;height:220px">
+          <defs><filter id="glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+          <circle cx="130" cy="130" r="110" fill="none" stroke="#e8e2d8" stroke-width="1"/>
+          <circle cx="130" cy="130" r="80" fill="none" stroke="#e8e2d8" stroke-width=".5" stroke-dasharray="4 4"/>
+          <line x1="20" y1="130" x2="240" y2="130" stroke="#e8e2d8" stroke-width="1"/>
+          <line x1="130" y1="20" x2="130" y2="240" stroke="#e8e2d8" stroke-width="1"/>
+          <line x1="52" y1="52" x2="208" y2="208" stroke="#e8e2d8" stroke-width=".5"/>
+          <line x1="208" y1="52" x2="52" y2="208" stroke="#e8e2d8" stroke-width=".5"/>
+          <circle cx="130" cy="130" r="36" fill="#b8956a" opacity=".08" filter="url(#glow)"/>
+          <text x="130" y="126" text-anchor="middle" font-size="11" font-weight="900" fill="#b8956a" font-family="sans-serif">16 种</text>
+          <text x="130" y="140" text-anchor="middle" font-size="11" font-weight="900" fill="#b8956a" font-family="sans-serif">组合</text>
+          <text x="130" y="16" text-anchor="middle" font-size="11" font-weight="700" fill="#b8956a" font-family="sans-serif">L 聚焦</text>
+          <text x="130" y="254" text-anchor="middle" font-size="11" font-weight="700" fill="#8a7a65" font-family="sans-serif">C 分散</text>
+          <text x="248" y="134" text-anchor="middle" font-size="11" font-weight="700" fill="#c97a5a" font-family="sans-serif">R 进取</text>
+          <text x="12" y="134" text-anchor="middle" font-size="11" font-weight="700" fill="#78909c" font-family="sans-serif">S 稳健</text>
+          <circle cx="130" cy="20" r="3" fill="#b8956a"/><circle cx="130" cy="240" r="3" fill="#8a7a65"/>
+          <circle cx="240" cy="130" r="3" fill="#c97a5a"/><circle cx="20" cy="130" r="3" fill="#78909c"/>
+        </svg>
       </div>
       <div class="dim-card" style="margin-bottom:10px;border-left-color:${DC.L}">
         <div class="dim-card-header"><span class="dim-card-label">职业主线</span><span style="font-size:12px;color:${DC.L}">方向感</span></div>
@@ -894,11 +926,11 @@ function renderResult(code) {
 
   document.getElementById('app').innerHTML = `
     <button class="nav-back" onclick="resumeTest=true;navigate('/test')">← 返回修改</button>
-    <div class="card">
+    <div class="result-card">
       <div class="result-top">
+        <div class="result-code" style="color:${TYPE_COLORS[code]}">${code}</div>
         <div class="result-avatar">${avatarSVG(code)}</div>
         <div class="result-char">${t.character}</div>
-        <div class="result-code" style="color:${TYPE_COLORS[code]}">${code}</div>
         <div class="result-name">${t.name}</div>
         <div class="result-tagline">「${t.tagline}」</div>
       </div>
@@ -987,11 +1019,11 @@ function renderTypeDetail(code) {
 
   document.getElementById('app').innerHTML = `
     <button class="nav-back" onclick="navigate('/types')">← 返回图鉴</button>
-    <div class="card">
+    <div class="result-card">
       <div class="result-top">
+        <div class="result-code" style="color:${TYPE_COLORS[code]}">${code}</div>
         <div class="result-avatar">${avatarSVG(code)}</div>
         <div class="result-char">${t.character}</div>
-        <div class="result-code" style="color:${TYPE_COLORS[code]}">${code}</div>
         <div class="result-name">${t.name}</div>
         <div class="result-tagline">「${t.tagline}」</div>
       </div>
@@ -1024,13 +1056,13 @@ function showTypeModal(code) {
   });
   const overlay = document.createElement('div');
   overlay.className = 'tmodal';
-  overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+  overlay.onclick = function(e) { if (e.target === overlay) { overlay.classList.add('close'); setTimeout(() => overlay.remove(), 150); } };
   overlay.innerHTML = `<div class="tmodal-card">
-    <button class="tmodal-close" onclick="this.closest('.tmodal').remove()">×</button>
+    <button class="tmodal-close" onclick="var m=this.closest('.tmodal');m.classList.add('close');setTimeout(()=>m.remove(),150)">×</button>
     <div class="result-top">
+      <div class="result-code" style="color:${TYPE_COLORS[code]}">${code}</div>
       <div class="result-avatar">${avatarSVG(code)}</div>
       <div class="result-char">${t.character}</div>
-      <div class="result-code" style="color:${TYPE_COLORS[code]}">${code}</div>
       <div class="result-name">${t.name}</div>
       <div class="result-tagline">「${t.tagline}」</div>
     </div>
